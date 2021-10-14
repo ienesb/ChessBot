@@ -139,4 +139,4 @@ cython_debug/
 
 .temp
 temp
-*.png
+old
