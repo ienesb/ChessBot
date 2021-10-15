@@ -5,7 +5,7 @@ import os
 
 PNGS = "pngs/pieces"
 
-class Pozition():
+class Position():
     def __init__(self, row, column):
         self.row = row
         self.column = column
@@ -23,203 +23,195 @@ class Pozition():
         return f"{int(self.row)}-{int(self.column)}"
 
 class Piece():
-    def __init__(self, color, pozition:Pozition):
+    def __init__(self, color, position:Position):
         self.color = color
-        self.pozition = pozition
+        self.position = position
 
-    
-    def move(self, board, target:Pozition):
-        if self.pozition == target:
+    def performMovement(self, target:Position):
+        self.position = target
+
+    def move(self, board, target:Position):
+        if self.position == target:
             return -6
         if target.column > 8 or target.column < 1 or target.row > 8 or target.row > 1:
             return -5
-        if self.color == board[target.asStr()].color:
+        if hasattr(board[target.asStr()], "color") and self.color == board[target.asStr()].color:
             return -3
-
-        self.pozition = target
         return 0
 
 
 class At(Piece):
-    def __init__(self, color, pozition: Pozition):
+    def __init__(self, color, position: Position):
         self.pngname = os.path.join(PNGS, "at.png")
-        super().__init__(color, pozition)
+        super().__init__(color, position)
 
-    def move(self, board, target:Pozition):  
+    def move(self, board, target:Position):  
         if super().move(board, target):
             super().move(board, target)
                 
         statements1 = []
-        statements1.append(((self.pozition.column + 1 == target.column) and (self.pozition.row + 2 == target.row)))
-        statements1.append(((self.pozition.column + 2 == target.column) and (self.pozition.row + 1 == target.row)))
-        statements1.append(((self.pozition.column + 1 == target.column) and (self.pozition.row - 2 == target.row)))
-        statements1.append(((self.pozition.column + 2 == target.column) and (self.pozition.row - 1 == target.row)))
-        statements1.append(((self.pozition.column - 1 == target.column) and (self.pozition.row + 2 == target.row)))
-        statements1.append(((self.pozition.column - 2 == target.column) and (self.pozition.row + 1 == target.row)))
-        statements1.append(((self.pozition.column - 1 == target.column) and (self.pozition.row - 2 == target.row)))
-        statements1.append(((self.pozition.column - 2 == target.column) and (self.pozition.row - 1 == target.row)))
+        statements1.append(((self.position.column + 1 == target.column) and (self.position.row + 2 == target.row)))
+        statements1.append(((self.position.column + 2 == target.column) and (self.position.row + 1 == target.row)))
+        statements1.append(((self.position.column + 1 == target.column) and (self.position.row - 2 == target.row)))
+        statements1.append(((self.position.column + 2 == target.column) and (self.position.row - 1 == target.row)))
+        statements1.append(((self.position.column - 1 == target.column) and (self.position.row + 2 == target.row)))
+        statements1.append(((self.position.column - 2 == target.column) and (self.position.row + 1 == target.row)))
+        statements1.append(((self.position.column - 1 == target.column) and (self.position.row - 2 == target.row)))
+        statements1.append(((self.position.column - 2 == target.column) and (self.position.row - 1 == target.row)))
         
         if not(True in statements1):
             return -1
 
-        self.pozition = target
         return 0
 
 
 class Fil(Piece):
-    def __init__(self, color, pozition: Pozition):
+    def __init__(self, color, position: Position):
         self.pngname = os.path.join(PNGS, "fil.png")
-        super().__init__(color, pozition)
+        super().__init__(color, position)
 
-    def move(self, board, target:Pozition):
+    def move(self, board, target:Position):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = int(abs(self.pozition.column - target.column))
-        rowdif = int(abs(self.pozition.row - target.row))
+        coldif = int(abs(self.position.column - target.column))
+        rowdif = int(abs(self.position.row - target.row))
         
         if not coldif == rowdif:
             return -1
 
-        colstep = 1 if self.pozition.column < target.column else -1
-        rowstep = 1 if self.pozition.row < target.row else -1
+        colstep = 1 if self.position.column < target.column else -1
+        rowstep = 1 if self.position.row < target.row else -1
         
         for i in range(1,coldif):
-            tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
+            tempPos = Position(row=self.position.row+rowstep*i, column=self.position.column+colstep*i)
             if board[tempPos.asStr()]:
                 return -2
-        self.pozition = target
+
         return 0
 
 
 class Kale(Piece):
-    def __init__(self, color, pozition: Pozition):
+    def __init__(self, color, position: Position):
         self.pngname = os.path.join(PNGS, "kale.png")
-        super().__init__(color, pozition)
+        super().__init__(color, position)
 
-    def move(self, board, target:Pozition):
+    def move(self, board, target:Position):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = int(abs(self.pozition.column - target.column))
-        rowdif = int(abs(self.pozition.row - target.row))
+        coldif = int(abs(self.position.column - target.column))
+        rowdif = int(abs(self.position.row - target.row))
         
         if coldif > 0 and rowdif > 0:
             return -1
         
-        if self.pozition.column < target.column:
+        if self.position.column < target.column:
             colstep = 1
-        elif self.pozition.column > target.column:
+        elif self.position.column > target.column:
             colstep = -1
         else:
             colstep = 0
 
-        if self.pozition.row < target.row:
+        if self.position.row < target.row:
             rowstep = 1
-        elif self.pozition.row > target.row:
+        elif self.position.row > target.row:
             rowstep = -1
         else:
             rowstep = 0
 
         for i in range(1,coldif+rowdif):
-            tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
+            tempPos = Position(row=self.position.row+rowstep*i, column=self.position.column+colstep*i)
             if board[tempPos.asStr()]:
                 return -2
 
-        self.pozition = target
         return 0
 
 
 class Vezir(Piece):
-    def __init__(self, color, pozition: Pozition):
+    def __init__(self, color, position: Position):
         self.pngname = os.path.join(PNGS, "vezir.png")
-        super().__init__(color, pozition)
+        super().__init__(color, position)
 
-    def move(self, board, target:Pozition):
+    def move(self, board, target:Position):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = int(abs(self.pozition.column - target.column))
-        rowdif = int(abs(self.pozition.row - target.row))
+        coldif = int(abs(self.position.column - target.column))
+        rowdif = int(abs(self.position.row - target.row))
 
         if not(coldif == 0 or rowdif == 0 or coldif == rowdif):
             return -1
         
         if coldif == 0 or rowdif == 0:
 
-            if self.pozition.column < target.column:
+            if self.position.column < target.column:
                 colstep = 1
-            elif self.pozition.column > target.column:
+            elif self.position.column > target.column:
                 colstep = -1
             else:
                 colstep = 0
 
-            if self.pozition.row < target.row:
+            if self.position.row < target.row:
                 rowstep = 1
-            elif self.pozition.row > target.row:
+            elif self.position.row > target.row:
                 rowstep = -1
             else:
                 rowstep = 0
 
             for i in range(1,coldif+rowdif):
-                tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
+                tempPos = Position(row=self.position.row+rowstep*i, column=self.position.column+colstep*i)
                 if board[tempPos.asStr()]:
                     return -2
 
         else:
-            colstep = 1 if self.pozition.column < target.column else -1
-            rowstep = 1 if self.pozition.row < target.row else -1
+            colstep = 1 if self.position.column < target.column else -1
+            rowstep = 1 if self.position.row < target.row else -1
             
             for i in range(1,coldif):
-                tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
+                tempPos = Position(row=self.position.row+rowstep*i, column=self.position.column+colstep*i)
                 if board[tempPos.asStr()]:
                     return -2
 
-
-        self.pozition = target
         return 0
 
 
 class Sah(Piece):
-    def __init__(self, color, pozition: Pozition):
+    def __init__(self, color, position: Position):
         self.pngname = os.path.join(PNGS, "sah.png")
-        super().__init__(color, pozition)
+        super().__init__(color, position)
 
-    def move(self, board, target:Pozition):
+    def move(self, board, target:Position):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = int(abs(self.pozition.column - target.column))
-        rowdif = int(abs(self.pozition.row - target.row))
+        coldif = int(abs(self.position.column - target.column))
+        rowdif = int(abs(self.position.row - target.row))
 
         if coldif <= 1 and rowdif <=1:
             return -1
-        self.pozition = target
+
         return 0
         
 
 class Piyon(Piece):
-    def __init__(self, color, pozition: Pozition):
+    def __init__(self, color, position: Position):
         self.pngname = os.path.join(PNGS, "piyon.png")
-        super().__init__(color, pozition)
+        super().__init__(color, position)
 
-    def move(self, board, target:Pozition):
+    def move(self, board, target:Position):
         if super().move(board, target):
             super().move(board, target)
 
         if self.color == "w":
-            if not (self.pozition.row + 1 == target.row and self.pozition.column == target.column):
+            if not (self.position.row + 1 == target.row and self.position.column == target.column):
                 return -1
-            self.pozition = target
             return 0
 
         else:
-            if not (self.pozition.row - 1 == target.row and self.pozition.column == target.column):
+            if not (self.position.row - 1 == target.row and self.position.column == target.column):
                 return -1
-            self.pozition = target
             return 0
-
-    
         
 if __name__ == "__main__":
     pass
