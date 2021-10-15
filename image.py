@@ -12,7 +12,7 @@ class Block(QtWidgets.QLabel):
         self.name = name
         self.Y, self.X = name
         self.X = 7 - self.X
-        self.pozition = Pozition(self.X+1, self.Y+1)
+        self.position = Position(self.X+1, self.Y+1)
 
         # To create ".temp" folder if it is not exist.
         os.makedirs(".temp", exist_ok=True)
@@ -37,7 +37,8 @@ class Block(QtWidgets.QLabel):
             selected = Block.getSelected()
             if not selected:
                 return None
-            if not selected.piece.move(board=Game.board, target=self.pozition):
+                
+            if not selected.piece.move(board=Game.board, target=self.position):
                 self.setPiece(selected.piece)
                 selected.setPiece(None)
                 Game.changePiece(self.getPiece(), self.position)
@@ -96,42 +97,42 @@ class Game(object):
 
         for i in range(1,9):
             for j in range(1,9):
-                pos = Pozition(i,j)
+                pos = Position(i,j)
                 self.board[pos.asStr()] = None
 
-        self.setPiece(Piyon("b", Pozition(7, 1)))
-        self.setPiece(Piyon("b", Pozition(7, 2)))
-        self.setPiece(Piyon("b", Pozition(7, 3)))
-        self.setPiece(Piyon("b", Pozition(7, 4)))
-        self.setPiece(Piyon("b", Pozition(7, 5)))
-        self.setPiece(Piyon("b", Pozition(7, 6)))
-        self.setPiece(Piyon("b", Pozition(7, 7)))
-        self.setPiece(Piyon("b", Pozition(7, 8)))
-        self.setPiece(At("b", Pozition(8, 2)))
-        self.setPiece(Fil("b", Pozition(8, 3)))
-        self.setPiece(Kale("b", Pozition(8, 1)))
-        self.setPiece(At("b", Pozition(8, 7)))
-        self.setPiece(Fil("b", Pozition(8, 6)))
-        self.setPiece(Kale("b", Pozition(8, 8)))
-        self.setPiece(Vezir("b", Pozition(8, 4)))
-        self.setPiece(Sah("b", Pozition(8, 5)))
+        self.setPiece(Piyon("b", Position(7, 1)))
+        self.setPiece(Piyon("b", Position(7, 2)))
+        self.setPiece(Piyon("b", Position(7, 3)))
+        self.setPiece(Piyon("b", Position(7, 4)))
+        self.setPiece(Piyon("b", Position(7, 5)))
+        self.setPiece(Piyon("b", Position(7, 6)))
+        self.setPiece(Piyon("b", Position(7, 7)))
+        self.setPiece(Piyon("b", Position(7, 8)))
+        self.setPiece(At("b", Position(8, 2)))
+        self.setPiece(Fil("b", Position(8, 3)))
+        self.setPiece(Kale("b", Position(8, 1)))
+        self.setPiece(At("b", Position(8, 7)))
+        self.setPiece(Fil("b", Position(8, 6)))
+        self.setPiece(Kale("b", Position(8, 8)))
+        self.setPiece(Vezir("b", Position(8, 4)))
+        self.setPiece(Sah("b", Position(8, 5)))
 
-        self.setPiece(Piyon("w", Pozition(3, 1)))
-        self.setPiece(Piyon("w", Pozition(3, 2)))
-        self.setPiece(Piyon("w", Pozition(3, 3)))
-        self.setPiece(Piyon("w", Pozition(3, 4)))
-        self.setPiece(Piyon("w", Pozition(3, 5)))
-        self.setPiece(Piyon("w", Pozition(3, 6)))
-        self.setPiece(Piyon("w", Pozition(3, 7)))
-        self.setPiece(Piyon("w", Pozition(3, 8)))
-        self.setPiece(At("w", Pozition(1, 2)))
-        self.setPiece(Fil("w", Pozition(1, 3)))
-        self.setPiece(Kale("w", Pozition(1, 1)))
-        self.setPiece(At("w", Pozition(1, 7)))
-        self.setPiece(Fil("w", Pozition(1, 6)))
-        self.setPiece(Kale("w", Pozition(1, 8)))
-        self.setPiece(Vezir("w", Pozition(1, 4)))
-        self.setPiece(Sah("w", Pozition(1, 5)))
+        self.setPiece(Piyon("w", Position(3, 1)))
+        self.setPiece(Piyon("w", Position(3, 2)))
+        self.setPiece(Piyon("w", Position(3, 3)))
+        self.setPiece(Piyon("w", Position(3, 4)))
+        self.setPiece(Piyon("w", Position(3, 5)))
+        self.setPiece(Piyon("w", Position(3, 6)))
+        self.setPiece(Piyon("w", Position(3, 7)))
+        self.setPiece(Piyon("w", Position(3, 8)))
+        self.setPiece(At("w", Position(1, 2)))
+        self.setPiece(Fil("w", Position(1, 3)))
+        self.setPiece(Kale("w", Position(1, 1)))
+        self.setPiece(At("w", Position(1, 7)))
+        self.setPiece(Fil("w", Position(1, 6)))
+        self.setPiece(Kale("w", Position(1, 8)))
+        self.setPiece(Vezir("w", Position(1, 4)))
+        self.setPiece(Sah("w", Position(1, 5)))
 
         self.blocks = []
         for i in range(64):
@@ -141,20 +142,21 @@ class Game(object):
             block = Block(centralwidget, name=(x/SIZE,y/SIZE))
             block.setGeometry(QtCore.QRect(x, y, SIZE, SIZE))
             block.setScaledContents(True)
-            block.setPiece(self.getPieceAt(block.pozition))
+            block.setPiece(self.getPieceAt(block.position))
         
         Block.update()
         Game.board = self.board
 
-    def getPieceAt(self, pozition:Pozition):
-        return self.board[pozition.asStr()]
+    def getPieceAt(self, position:Position):
+        return self.board[position.asStr()]
 
     def setPiece(self, piece:Piece):
-        self.board[piece.pozition.asStr()] = piece
+        self.board[piece.position.asStr()] = piece
 
-    def changePiece(self, piece:Piece, pozition:Pozition):
-        self.board[piece.pozition.asStr()] = None
-        self.board[pozition.asStr()] = piece
+    @staticmethod
+    def changePiece(piece:Piece, position:Position):
+        Game.board[piece.position.asStr()] = None
+        Game.board[position.asStr()] = piece
 
     def getPieces(self):
         pass
