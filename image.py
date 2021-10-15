@@ -29,6 +29,8 @@ class Block(QtWidgets.QLabel):
     def setPiece(self, piece):
         self.piece = piece
 
+    def getPiece(self) -> Piece:
+        return self.piece
 
     def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
         if not self.piece:
