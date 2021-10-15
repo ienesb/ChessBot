@@ -24,7 +24,7 @@ class Block(QtWidgets.QLabel):
             self.color = "b"
         else:
             self.color = "w"
-        self.piece = None
+        self.piece = None        
     
     def setPiece(self, piece):
         self.piece = piece
@@ -37,8 +37,11 @@ class Block(QtWidgets.QLabel):
             selected = Block.getSelected()
             if not selected:
                 return None
-                
+
             if not selected.piece.move(board=Game.board, target=self.position):
+                if self.piece:
+                    self.piece.kill()
+
                 self.setPiece(selected.piece)
                 selected.setPiece(None)
                 Game.changePiece(self.getPiece(), self.position)
@@ -80,7 +83,7 @@ class Block(QtWidgets.QLabel):
                 color = Block.BLOCK_COLORS["r"]
 
             img[:,:,:] = color
-            if Block.blocks[i].piece:
+            if Block.blocks[i].piece and Block.blocks[i].piece.is_active:
                 piecePng = cv2.imread(Block.blocks[i].piece.pngname, 0)
                 img[piecePng==255] = Block.PIECE_COLORS[Block.blocks[i].piece.color]
             cv2.imwrite(Block.blocks[i].pngname, img)
@@ -170,17 +173,17 @@ class Game(object):
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1600, 1600)
+        MainWindow.setObjectName("ChessBot")
+        MainWindow.resize(800, 800)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
         self.game = Game(self.centralwidget)
 
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        # self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        # self.statusbar.setObjectName("statusbar")
+        # MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -188,7 +191,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("ChessBot", "ChessBot"))
 
 class MyApp(QtWidgets.QApplication): 
     def exec_(self):

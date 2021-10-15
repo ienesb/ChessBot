@@ -26,6 +26,7 @@ class Piece():
     def __init__(self, color, position:Position):
         self.color = color
         self.position = position
+        self.is_active = True
 
     def performMovement(self, target:Position):
         self.position = target
@@ -39,6 +40,8 @@ class Piece():
             return -3
         return 0
 
+    def kill(self) -> None:
+        self.is_active = False
 
 class At(Piece):
     def __init__(self, color, position: Position):
@@ -188,7 +191,7 @@ class Sah(Piece):
         coldif = int(abs(self.position.column - target.column))
         rowdif = int(abs(self.position.row - target.row))
 
-        if coldif <= 1 and rowdif <=1:
+        if coldif > 1 or rowdif > 1:
             return -1
 
         return 0
