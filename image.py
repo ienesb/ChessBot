@@ -2,8 +2,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from pieces import *
 
 class Block(QtWidgets.QLabel):
-    labels = {}
-    BLOCK_COLORS = {"w": [180,180,180], "b": [86,120,100], "r": [0,0,255]}
+    blocks = {}
+    BLOCK_COLORS = {"w": [180,180,180], "b": [86,120,100], "r": [255,255,0]}
     PIECE_COLORS = {"w":255, "b":54}
 
     def __init__(self, widget:QtWidgets.QWidget, name:tuple):
@@ -18,7 +18,7 @@ class Block(QtWidgets.QLabel):
         os.makedirs(".temp", exist_ok=True)
         
         self.pngname = os.path.join(".temp", f"{self.name}.png")
-        Block.labels[name] = self
+        Block.blocks[name] = self
 
         if (self.X + self.Y) % 2 == 0:
             self.color = "b"
@@ -31,47 +31,69 @@ class Block(QtWidgets.QLabel):
 
 
     def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
-        if self.is_selected:
-            self.is_selected = False
+        if not self.piece:
+            selected = Block.getSelected()
+            if not selected:
+                return None
+            if not selected.piece.move(board=Game.board, target=self.pozition):
+                self.setPiece(selected.piece)
+                selected.setPiece(None)
+                Block.setFalse()
         else:
-            Block.setFalse()
-            self.is_selected = True
+            if self.is_selected:
+                self.is_selected = False
+            else:
+                Block.setFalse()
+                self.is_selected = True
         Block.update()
 
 
+    def __str__(self) -> str:
+        return str(self.name)
+
+    @staticmethod
+    def getSelected():
+        for i in Block.blocks:
+            if Block.blocks[i].piece and Block.blocks[i].is_selected:
+                return Block.blocks[i]
+        return None
+    
+        
     @staticmethod
     def setFalse():
-        for i in Block.labels:
-            Block.labels[i].is_selected = False
-            Block.labels[i].setPixmap(QtGui.QPixmap(Block.labels[i].pngname))
+        for i in Block.blocks:
+            Block.blocks[i].is_selected = False
+            Block.blocks[i].setPixmap(QtGui.QPixmap(Block.blocks[i].pngname))
     
 
     @staticmethod
     def update():
-        for i in Block.labels:
+        for i in Block.blocks:
             img = np.zeros((200,200,3), dtype=np.uint8)
-            color = Block.BLOCK_COLORS[Block.labels[i].color]
-            if Block.labels[i].is_selected:
+            color = Block.BLOCK_COLORS[Block.blocks[i].color]
+            if Block.blocks[i].is_selected:
                 color = Block.BLOCK_COLORS["r"]
 
             img[:,:,:] = color
-            if Block.labels[i].piece:
-                piecePng = cv2.imread(Block.labels[i].piece.pngname, 0)
-                img[piecePng==255] = Block.PIECE_COLORS[Block.labels[i].piece.color]
-            cv2.imwrite(Block.labels[i].pngname, img)
-            Block.labels[i].setPixmap(QtGui.QPixmap(Block.labels[i].pngname))
+            if Block.blocks[i].piece:
+                piecePng = cv2.imread(Block.blocks[i].piece.pngname, 0)
+                img[piecePng==255] = Block.PIECE_COLORS[Block.blocks[i].piece.color]
+            cv2.imwrite(Block.blocks[i].pngname, img)
+            Block.blocks[i].setPixmap(QtGui.QPixmap(Block.blocks[i].pngname))
         
 
 
 class Game(object):
+    board = {}
+
     def __init__(self, centralwidget):
         self.turn = "w"
         self.board = {}
-        
+
         for i in range(1,9):
             for j in range(1,9):
                 pos = Pozition(i,j)
-                self.board[pos.as_str()] = None
+                self.board[pos.asStr()] = None
 
         self.setPiece(Piyon("b", Pozition(7, 1)))
         self.setPiece(Piyon("b", Pozition(7, 2)))
@@ -90,14 +112,14 @@ class Game(object):
         self.setPiece(Vezir("b", Pozition(8, 4)))
         self.setPiece(Sah("b", Pozition(8, 5)))
 
-        self.setPiece(Piyon("w", Pozition(2, 1)))
-        self.setPiece(Piyon("w", Pozition(2, 2)))
-        self.setPiece(Piyon("w", Pozition(2, 3)))
-        self.setPiece(Piyon("w", Pozition(2, 4)))
-        self.setPiece(Piyon("w", Pozition(2, 5)))
-        self.setPiece(Piyon("w", Pozition(2, 6)))
-        self.setPiece(Piyon("w", Pozition(2, 7)))
-        self.setPiece(Piyon("w", Pozition(2, 8)))
+        self.setPiece(Piyon("w", Pozition(3, 1)))
+        self.setPiece(Piyon("w", Pozition(3, 2)))
+        self.setPiece(Piyon("w", Pozition(3, 3)))
+        self.setPiece(Piyon("w", Pozition(3, 4)))
+        self.setPiece(Piyon("w", Pozition(3, 5)))
+        self.setPiece(Piyon("w", Pozition(3, 6)))
+        self.setPiece(Piyon("w", Pozition(3, 7)))
+        self.setPiece(Piyon("w", Pozition(3, 8)))
         self.setPiece(At("w", Pozition(1, 2)))
         self.setPiece(Fil("w", Pozition(1, 3)))
         self.setPiece(Kale("w", Pozition(1, 1)))
@@ -118,16 +140,17 @@ class Game(object):
             block.setPiece(self.getPieceAt(block.pozition))
         
         Block.update()
+        Game.board = self.board
 
     def getPieceAt(self, pozition:Pozition):
-        return self.board[pozition.as_str()]
+        return self.board[pozition.asStr()]
 
     def setPiece(self, piece:Piece):
-        self.board[piece.pozition.as_str()] = piece
+        self.board[piece.pozition.asStr()] = piece
 
     def changePiece(self, piece:Piece, pozition:Pozition):
-        self.board[piece.pozition.as_str()] = None
-        self.board[pozition.as_str()] = piece
+        self.board[piece.pozition.asStr()] = None
+        self.board[pozition.asStr()] = piece
 
     def getPieces(self):
         pass
@@ -166,7 +189,7 @@ class MyApp(QtWidgets.QApplication):
         super().exec_()
         shutil.rmtree(".temp")
         return 0
-
+    
 if __name__ == "__main__":
     import sys
     import shutil
