@@ -1,3 +1,7 @@
+# contributors:
+# yerminal
+# ienesb
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pieces import *
 
