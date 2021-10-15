@@ -13,6 +13,10 @@ class Block(QtWidgets.QLabel):
         self.Y, self.X = name
         self.X = 7 - self.X
         self.pozition = Pozition(self.X+1, self.Y+1)
+
+        # To create ".temp" folder if it is not exist.
+        os.makedirs(".temp", exist_ok=True)
+        
         self.pngname = os.path.join(".temp", f"{self.name}.png")
         Block.labels[name] = self
 
@@ -157,10 +161,16 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
 
+class MyApp(QtWidgets.QApplication): 
+    def exec_(self):
+        super().exec_()
+        shutil.rmtree(".temp")
+        return 0
 
 if __name__ == "__main__":
     import sys
-    app = QtWidgets.QApplication(sys.argv)
+    import shutil
+    app = MyApp(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
