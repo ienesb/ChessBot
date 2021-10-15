@@ -19,7 +19,7 @@ class Pozition():
             return True
         return False
 
-    def as_str(self):
+    def asStr(self):
         return f"{int(self.row)}-{int(self.column)}"
 
 class Piece():
@@ -33,8 +33,10 @@ class Piece():
             return -6
         if target.column > 8 or target.column < 1 or target.row > 8 or target.row > 1:
             return -5
-        if self.color == board[target].color:
+        if self.color == board[target.asStr()].color:
             return -3
+
+        self.pozition = target
         return 0
 
 
@@ -48,18 +50,19 @@ class At(Piece):
             super().move(board, target)
                 
         statements1 = []
-        statements1.append(((self.pozition.column + 1 == target.pozition.column) and (self.pozition.row + 2 == target.pozition.row)))
-        statements1.append(((self.pozition.column + 2 == target.pozition.column) and (self.pozition.row + 1 == target.pozition.row)))
-        statements1.append(((self.pozition.column + 1 == target.pozition.column) and (self.pozition.row - 2 == target.pozition.row)))
-        statements1.append(((self.pozition.column + 2 == target.pozition.column) and (self.pozition.row - 1 == target.pozition.row)))
-        statements1.append(((self.pozition.column - 1 == target.pozition.column) and (self.pozition.row + 2 == target.pozition.row)))
-        statements1.append(((self.pozition.column - 2 == target.pozition.column) and (self.pozition.row + 1 == target.pozition.row)))
-        statements1.append(((self.pozition.column - 1 == target.pozition.column) and (self.pozition.row - 2 == target.pozition.row)))
-        statements1.append(((self.pozition.column - 2 == target.pozition.column) and (self.pozition.row - 1 == target.pozition.row)))
+        statements1.append(((self.pozition.column + 1 == target.column) and (self.pozition.row + 2 == target.row)))
+        statements1.append(((self.pozition.column + 2 == target.column) and (self.pozition.row + 1 == target.row)))
+        statements1.append(((self.pozition.column + 1 == target.column) and (self.pozition.row - 2 == target.row)))
+        statements1.append(((self.pozition.column + 2 == target.column) and (self.pozition.row - 1 == target.row)))
+        statements1.append(((self.pozition.column - 1 == target.column) and (self.pozition.row + 2 == target.row)))
+        statements1.append(((self.pozition.column - 2 == target.column) and (self.pozition.row + 1 == target.row)))
+        statements1.append(((self.pozition.column - 1 == target.column) and (self.pozition.row - 2 == target.row)))
+        statements1.append(((self.pozition.column - 2 == target.column) and (self.pozition.row - 1 == target.row)))
         
         if not(True in statements1):
             return -1
 
+        self.pozition = target
         return 0
 
 
@@ -72,8 +75,8 @@ class Fil(Piece):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = abs(self.pozition.column - target.column)
-        rowdif = abs(self.pozition.row - target.row)
+        coldif = int(abs(self.pozition.column - target.column))
+        rowdif = int(abs(self.pozition.row - target.row))
         
         if not coldif == rowdif:
             return -1
@@ -83,9 +86,9 @@ class Fil(Piece):
         
         for i in range(1,coldif):
             tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
-            if board[tempPos]:
+            if board[tempPos.asStr()]:
                 return -2
-
+        self.pozition = target
         return 0
 
 
@@ -98,8 +101,8 @@ class Kale(Piece):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = abs(self.pozition.column - target.column)
-        rowdif = abs(self.pozition.row - target.row)
+        coldif = int(abs(self.pozition.column - target.column))
+        rowdif = int(abs(self.pozition.row - target.row))
         
         if coldif > 0 and rowdif > 0:
             return -1
@@ -120,10 +123,10 @@ class Kale(Piece):
 
         for i in range(1,coldif+rowdif):
             tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
-            if board[tempPos]:
+            if board[tempPos.asStr()]:
                 return -2
 
-
+        self.pozition = target
         return 0
 
 
@@ -136,8 +139,8 @@ class Vezir(Piece):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = abs(self.pozition.column - target.column)
-        rowdif = abs(self.pozition.row - target.row)
+        coldif = int(abs(self.pozition.column - target.column))
+        rowdif = int(abs(self.pozition.row - target.row))
 
         if not(coldif == 0 or rowdif == 0 or coldif == rowdif):
             return -1
@@ -160,7 +163,7 @@ class Vezir(Piece):
 
             for i in range(1,coldif+rowdif):
                 tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
-                if board[tempPos]:
+                if board[tempPos.asStr()]:
                     return -2
 
         else:
@@ -169,11 +172,11 @@ class Vezir(Piece):
             
             for i in range(1,coldif):
                 tempPos = Pozition(row=self.pozition.row+rowstep*i, column=self.pozition.column+colstep*i)
-                if board[tempPos]:
+                if board[tempPos.asStr()]:
                     return -2
 
 
-
+        self.pozition = target
         return 0
 
 
@@ -186,12 +189,12 @@ class Sah(Piece):
         if super().move(board, target):
             super().move(board, target)
 
-        coldif = abs(self.pozition.column - target.column)
-        rowdif = abs(self.pozition.row - target.row)
+        coldif = int(abs(self.pozition.column - target.column))
+        rowdif = int(abs(self.pozition.row - target.row))
 
         if coldif <= 1 and rowdif <=1:
             return -1
-
+        self.pozition = target
         return 0
         
 
@@ -207,13 +210,13 @@ class Piyon(Piece):
         if self.color == "w":
             if not (self.pozition.row + 1 == target.row and self.pozition.column == target.column):
                 return -1
-
+            self.pozition = target
             return 0
 
         else:
             if not (self.pozition.row - 1 == target.row and self.pozition.column == target.column):
                 return -1
-
+            self.pozition = target
             return 0
 
     
