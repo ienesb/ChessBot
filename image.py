@@ -40,6 +40,8 @@ class Block(QtWidgets.QLabel):
             if not selected.piece.move(board=Game.board, target=self.pozition):
                 self.setPiece(selected.piece)
                 selected.setPiece(None)
+                Game.changePiece(self.getPiece(), self.position)
+                self.getPiece().performMovement(self.position)
                 Block.setFalse()
         else:
             if self.is_selected:
