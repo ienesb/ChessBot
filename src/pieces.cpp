@@ -575,3 +575,27 @@ int Piece::checkMove(Block *target) {
 Game *Piece::getGame() {
     return game;
 }
+
+Knight::Knight(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
+    this->path = "../pngs/pieces/at.png";
+}
+
+Bishop::Bishop(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
+    this->path = "../pngs/pieces/fil.png";
+}
+
+Rook::Rook(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
+    this->path = "../pngs/pieces/kale.png";
+}
+
+Queen::Queen(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
+    this->path = "../pngs/pieces/vezir.png";
+}
+
+King::King(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
+    this->path = "../pngs/pieces/sah.png";
+}
+
+Pawn::Pawn(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
+    this->path = "../pngs/pieces/piyon.png";
+}

@@ -4,6 +4,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
+#include <QMouseEvent>
+#include <QPixmap>
 #include <opencv2/opencv.hpp>
 
 #include <iostream>
@@ -13,6 +15,7 @@
 #include "game.h"
 #include "block.h"
 #include "pieces.h"
+
 
 void Block::mousePressEvent(QMouseEvent *ev){
     this->game->press(this);
@@ -26,50 +29,17 @@ Block::Block(QWidget* widget, Game* game, int x, int y):QLabel::QLabel(widget){
     this->isClicked = false;
     
     if((x+y)%2 == 0){
-        this->path = "pngs/base/black.png";
+        this->path = "../pngs/base/black.png";
     }
     else{
-        this->path = "pngs/base/white.png";
+        this->path = "../pngs/base/white.png";
     }
-    this->clickedPath = "pngs/base/red.png";
+    this->clickedPath = "../pngs/base/red.png";
     
-    // std::stringstream ss;  
-    // std::string strX, strY;
-    // ss << x;  
-    // ss >> strX;  
-    // ss << y;  
-    // ss >> strY; 
-
-    // this->setObjectName(QString::fromUtf8(strX + "-" + strY));
-    this->setGeometry(QRect(x*20, (8-y)*20, 20, 20));
+    this->setGeometry(QRect((x-1)*SIZE, (8-y)*SIZE, SIZE, SIZE));
 
 }
 
-Block::Block(QWidget* widget, Game* game, int x, int y, Piece* piece):QLabel::QLabel(widget){
-    this->game = game;
-    this->x = x;
-    this->y = y;
-    this->piece = piece;
-    this->isClicked = false;
-
-    if((x+y)%2 == 0){
-        this->path = "pngs/base/black.png";
-    }
-    else{
-        this->path = "pngs/base/white.png";
-    }
-    this->clickedPath = "pngs/base/red.png";
-
-    // std::stringstream ss;  
-    // std::string strX, strY;
-    // ss >> strX;  
-    // ss << y;  
-    // ss >> strY; 
-
-    // this->setObjectName(QString::fromUtf8(strX + "-" + strY));
-    this->setGeometry(QRect(x*20, (8-y)*20, 20, 20));
-           
-}
 
 void Block::setPiece(Piece* piece){
     this->piece = piece;
@@ -89,13 +59,13 @@ std::string Block::getColor(){
 }
 
 void Block::update(){
-    std::cout << this->clickedPath << "\n";
+    QPixmap* image;
     if(this->piece == nullptr){
         if(this->isClicked){
-            QPixmap image(*clickedPath);
+            image = new QPixmap(this->clickedPath.c_str());
         }
         else{
-            QPixmap image(this->path);
+            image = new QPixmap(this->path.c_str());
         }
     }
     else{
@@ -115,10 +85,12 @@ void Block::update(){
         else{
             baseImage.setTo(0, pieceImage==255);
         }
-        
+
+        cv::resize(baseImage, baseImage, cv::Size(SIZE, SIZE), cv::INTER_LINEAR);
+
         cv::imwrite(".temppng.png", baseImage);
-        QPixmap image(".temppng.png");
+        image = new QPixmap(".temppng.png");
 
     }
-    this->setPixmap(image);
+    this->setPixmap(*image);
 }

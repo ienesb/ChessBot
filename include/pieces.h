@@ -25,37 +25,37 @@ class Piece{
 
 class Knight: public Piece{
     public:
-    std::string path = "pngs/pieces/at.png";
+    Knight(std::string color, Block* block, Game* game);
     int checkMove(Block* target) override;
 };
 
 class Bishop: public Piece{
     public:
-    std::string path = "pngs/pieces/fil.png";
+    Bishop(std::string color, Block* block, Game* game);
     int checkMove(Block* target) override;
 };
 
 class Rook: public Piece{
     public:
-    std::string path = "pngs/pieces/kale.png";
+    Rook(std::string color, Block* block, Game* game);
     int checkMove(Block* target) override;
 };
 
 class Queen: public Piece{
     public:
-    std::string path = "pngs/pieces/vezir.png";
+    Queen(std::string color, Block* block, Game* game);
     int checkMove(Block* target) override;
 };
 
 class King: public Piece{
     public:
-    std::string path = "pngs/pieces/sah.png";
+    King(std::string color, Block* block, Game* game);
     int checkMove(Block* target) override;
 };
 
 class Pawn: public Piece{
     public:
-    std::string path = "pngs/pieces/piyon.png";
+    Pawn(std::string color, Block* block, Game* game);
     int checkMove(Block* target) override;
 };
 

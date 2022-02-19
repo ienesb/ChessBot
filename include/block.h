@@ -1,7 +1,14 @@
 #ifndef BLOCK
 #define BLOCK
 
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QWidget>
+#include <QMouseEvent>
+#include <QPixmap>
 
 #include <iostream>
 #include <vector>
@@ -26,7 +33,6 @@ class Block : public QLabel{
     std::string clickedPath;
     void mousePressEvent(QMouseEvent *ev);
     Block(QWidget* widget, Game* game, int x, int y);
-    Block(QWidget* widget, Game* game, int x, int y, Piece* piece);
     void setPiece(Piece* piece);
     Piece* getPiece();
     std::vector<int> getCoordinates();
