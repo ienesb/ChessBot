@@ -11,13 +11,14 @@ class Game{
 private:
     int numberOfPlayer{};
     Block* board[64]{};
-    Piece* pieces[32]{};
+    King* wKing;
+    King* bKing;
     
 public:
     Game();
     void press(Block* pressed);
     Block* getBlock(int x, int y);
-    Piece* getKing(std::string color); 
+    King* getKing(std::string color); 
     void performMovement(Piece* piece, Block* target);
     
 };

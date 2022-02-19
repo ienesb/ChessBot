@@ -16,8 +16,11 @@ Block* Game::getBlock(int x, int y){
     return board[63-8*y+x];
 }
 
-Piece* Game::getKing(std::string color){
-    
+King* Game::getKing(std::string color){
+    if(color == "w"){
+        return this->wKing;
+    }
+    return this->bKing;
 }
 
 void Game::performMovement(Piece* piece, Block* target){
