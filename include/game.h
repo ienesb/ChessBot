@@ -13,6 +13,7 @@ public:
     Game();
     void press(Block* pressed);
     Block* getBlock(int x, int y);
+    void performMovement(Piece* piece, Block* target);
     
 };
 #endif
