@@ -17,33 +17,32 @@ class Piece{
 
 class Knight: public Piece{
     public:
-    int checkMove(Block* target);
+    int checkMove(Block* target) override;
 };
 
 class Bishop: public Piece{
     public:
-    int checkMove(Block* target);
+    int checkMove(Block* target) override;
 };
 
 class Rook: public Piece{
     public:
-    int checkMove(Block* target);
+    int checkMove(Block* target) override;
 };
 
 class Queen: public Piece{
     public:
-    int checkMove(Block* target);
+    int checkMove(Block* target) override;
 };
 
 class King: public Piece{
     public:
-    int checkMove(Block* target);
+    int checkMove(Block* target) override;
 };
 
 class Pawn: public Piece{
     public:
-    int checkMove(Block* target);
+    int checkMove(Block* target) override;
 };
-
 
 #endif
