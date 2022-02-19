@@ -557,15 +557,15 @@ Piece::Piece(std::string color, Block block, Game game) {
 }
 
 void Piece::setBlock(Block *block) {
-
+    this->block = block;
 }
 
 Block *Piece::getBlock() {
-    return nullptr;
+    return this->block;
 }
 
 std::string Piece::getColor() {
-    return std::string();
+    return this->color;
 }
 
 int Piece::checkMove(Block *target) {
