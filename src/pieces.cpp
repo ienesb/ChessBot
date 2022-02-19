@@ -1,9 +1,9 @@
 /*
-taş oraya gidebilir mi?(kale düz gidebilir mi?) -> -1
-arada başka taş var mı? -> -2
-gitmek istediği yerde kendi taşı var mı? -> -3
-yaptığı hamle kendini mat ediyor mu) -> -4
-bulunduğu kareye mi gitmeye çalışıyor? -> -5
+tas oraya gidebilir mi?(kale duz gidebilir mi?) -> -1
+arada baska tas var mi? -> -2
+gitmek istedigi yerde kendi tasi var mi? -> -3
+yaptigi hamle kendini mat ediyor mu? -> -4
+bulundugu kareye mi gitmeye calisiyor? -> -5
 */
 
 /*
@@ -16,7 +16,6 @@ piyon   pawn 5
 */
 
 // TODO:
-//  remove return false; from all methods of sub Piece classes
 //  consider castling in the future
 
 #include <iostream>
