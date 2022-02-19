@@ -8,38 +8,28 @@
 #include <QPixmap>
 
 #include "game.h"
+#include "ui.h"
 
-class GameUi{
-    public:
-    Game* game;
-    QWidget *centralwidget;
-    QLabel *label;
-    QStatusBar *statusbar;
+void GameUi::setupUi(QMainWindow *MainWindow){
+    if (MainWindow->objectName().isEmpty())
+        MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
+    MainWindow->resize(SIZE*8+50, SIZE*8+50);
+    centralwidget = new QWidget(MainWindow);
+    centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
 
-    void setupUi(QMainWindow *MainWindow)
-    {
-        if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 800);
-        centralwidget = new QWidget(MainWindow);
-        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+    this->game = new Game(centralwidget);
+    
+    MainWindow->setCentralWidget(centralwidget);
+    statusbar = new QStatusBar(MainWindow);
+    statusbar->setObjectName(QString::fromUtf8("statusbar"));
+    MainWindow->setStatusBar(statusbar);
 
-        this->game = new Game(centralwidget);
-        
-        MainWindow->setCentralWidget(centralwidget);
-        statusbar = new QStatusBar(MainWindow);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        MainWindow->setStatusBar(statusbar);
+    retranslateUi(MainWindow);
 
-        retranslateUi(MainWindow);
+    QMetaObject::connectSlotsByName(MainWindow);
+} // setupUi
 
-        QMetaObject::connectSlotsByName(MainWindow);
-    } // setupUi
-
-    void retranslateUi(QMainWindow *MainWindow)
-    {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        this->game->update();
-    } // retranslateUi
-
-};
+void GameUi::retranslateUi(QMainWindow *MainWindow){
+    MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+    this->game->update();
+} // retranslateUi
