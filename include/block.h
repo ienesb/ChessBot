@@ -1,10 +1,10 @@
 #ifndef BLOCK
 #define BLOCK
 
+#include <QtWidgets/QLabel>
+
 #include <iostream>
 #include <vector>
-#include <QApplication>
-#include <QLabel>
 
 #include "game.h"
 #include "pieces.h"
@@ -21,12 +21,16 @@ class Block : public QLabel{
     int y;
 
     public:
-    void mousePressEvent(QMouseEvent *ev) override;
-    Block(QDialog *Dialog, Game* game, int x, int y, Piece* piece=nullptr);
+    bool isClicked;
+    std::string path;
+    void mousePressEvent(QMouseEvent *ev);
+    Block(QDialog *dialog, Game* game, int x, int y);
+    Block(QDialog *dialog, Game* game, int x, int y, Piece* piece);
     void setPiece(Piece* piece);
     Piece* getPiece();
     std::vector<int> getCoordinates();
     std::string getColor();
+    void update();
 
 };
 

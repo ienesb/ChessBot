@@ -1,4 +1,5 @@
 #include <QtWidgets/QLabel>
+#include <opencv2/opencv.hpp>
 
 #include <iostream>
 #include <vector>
@@ -16,6 +17,13 @@ Block::Block(QDialog *dialog, Game* game, int x, int y):QLabel::QLabel(dialog){
     this->x = x;
     this->y = y;
     this->piece = nullptr;
+    if((x+y)%2 == 0){
+        this->path = "pngs/base/black.png";
+    }
+    else{
+        this->path = "pngs/base/white.png";
+    }
+    
            
 }
 
@@ -24,6 +32,12 @@ Block::Block(QDialog *dialog, Game* game, int x, int y, Piece* piece):QLabel::QL
     this->x = x;
     this->y = y;
     this->piece = piece;
+    if((x+y)%2 == 0){
+        this->path = "pngs/base/black.png";
+    }
+    else{
+        this->path = "pngs/base/white.png";
+    }
            
 }
 
@@ -42,4 +56,38 @@ std::vector<int> Block::getCoordinates(){
 
 std::string Block::getColor(){
     return color;
+}
+
+void Block::update(){
+    if(this->piece == nullptr){
+        if(this->isClicked){
+            QPixmap image(Block.clickedPath);
+        }
+        else{
+            QPixmap image(this->path);
+        }
+    }
+    else{
+        Mat baseImage, pieceImage;
+        if(this->isClicked){
+            baseImage = imread(Block.clickedPath ,1);
+        }
+        else{
+            baseImage = imread(this->path ,1);
+        }
+
+        pieceImage = imread(this->piece->path ,1);
+        
+        if(this->piece->color == "w"){
+            baseImage.setTo(255, pieceImage==255);
+        }
+        else{
+            baseImage.setTo(0, pieceImage==255);
+        }
+        
+        imwrite(".temppng.png", baseImage);
+        QPixmap image(".temppng.png");
+
+    }
+    this->setPixmap(image);
 }
