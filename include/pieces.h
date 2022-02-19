@@ -3,7 +3,7 @@
 
 class Piece{
     private:
-    std::string color; // "w" or "b" 
+    char color; // 'w' or 'b'
     Block* block;
     Game* game;
 
