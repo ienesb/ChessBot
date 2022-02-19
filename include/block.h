@@ -21,6 +21,8 @@ class Block : public QLabel{
     int y;
 
     public:
+    bool isClicked;
+    std::string path;
     void mousePressEvent(QMouseEvent *ev);
     Block(QDialog *dialog, Game* game, int x, int y);
     Block(QDialog *dialog, Game* game, int x, int y, Piece* piece);
@@ -28,6 +30,7 @@ class Block : public QLabel{
     Piece* getPiece();
     std::vector<int> getCoordinates();
     std::string getColor();
+    void update();
 
 };
 

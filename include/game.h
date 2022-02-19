@@ -20,6 +20,7 @@ public:
     Block* getBlock(int x, int y);
     King* getKing(std::string color); 
     void performMovement(Piece* piece, Block* target);
+    void update();
     
 };
 #endif

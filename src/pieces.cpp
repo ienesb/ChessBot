@@ -145,16 +145,18 @@ int Pawn::checkMove(Block* target){
     return 0;
 }
 
-Piece::Piece(std::string color, Block *block) {
-
+Piece::Piece(std::string color, Block *block, Game* game) {
+    this->color = color;
+    this->block = block;
+    this->game = game;
 }
 
 void Piece::setBlock(Block *block) {
-
+    this->block = block;
 }
 
 Block *Piece::getBlock() {
-    return nullptr;
+    return this->block;
 }
 
 std::string Piece::getColor() {

@@ -27,4 +27,12 @@ void Game::performMovement(Piece* piece, Block* target){
     piece->getBlock()->setPiece(nullptr);
     piece->setBlock(target);
     target->setPiece(piece);
+    this->update();
+}
+
+void Game::update(){
+    int i;
+    for(i = 0; i < 64; i++){
+        this->board[i]->update();
+    }
 }
