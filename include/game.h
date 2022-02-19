@@ -1,8 +1,19 @@
 #ifndef GAME
 #define GAME
 
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QWidget>
+#include <QMouseEvent>
+#include <QPixmap>
+
 #include "block.h"
 #include "pieces.h"
+
+#define SIZE 100
 
 class Piece;
 class Block;

@@ -1,3 +1,12 @@
+#include <QtCore/QVariant>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QWidget>
+#include <QMouseEvent>
+#include <QPixmap>
+
 #include <iostream>
 
 #include "game.h"
@@ -12,47 +21,47 @@ Game::Game(QWidget* centralwidget) {
         }
     }
     for(i = 1; i < 9; i++){
-        Pawn* wPawn = (Pawn*) new Piece("w", this->getBlock(i, 2), this);
-        Pawn* bPawn = (Pawn*) new Piece("b", this->getBlock(i, 7), this);
+        Pawn* wPawn = new Pawn("w", this->getBlock(i, 2), this);
+        Pawn* bPawn = new Pawn("b", this->getBlock(i, 7), this);
         this->getBlock(i, 2)->setPiece(wPawn);
         this->getBlock(i, 7)->setPiece(bPawn);
         switch(i){
             case 1:
             case 8:{
-                Rook* wRook = (Rook*) new Piece("w", this->getBlock(i, 1), this);
-                Rook* bRook = (Rook*) new Piece("b", this->getBlock(i, 8), this);
+                Rook* wRook = new Rook("w", this->getBlock(i, 1), this);
+                Rook* bRook = new Rook("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wRook);
                 this->getBlock(i, 8)->setPiece(bRook);
                 break;
             }
             case 2:
             case 7:{
-                Knight* wKnight = (Knight*) new Piece("w", this->getBlock(i, 1), this);
-                Knight* bKnight = (Knight*) new Piece("b", this->getBlock(i, 8), this);
+                Knight* wKnight = new Knight("w", this->getBlock(i, 1), this);
+                Knight* bKnight = new Knight("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wKnight);
                 this->getBlock(i, 8)->setPiece(bKnight);
                 break;
             }
             case 3:
             case 6:{
-                Bishop* wBishop = (Bishop*) new Piece("w", this->getBlock(i, 1), this);
-                Bishop* bBishop = (Bishop*) new Piece("b", this->getBlock(i, 8), this);
+                Bishop* wBishop = new Bishop("w", this->getBlock(i, 1), this);
+                Bishop* bBishop = new Bishop("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wBishop);
                 this->getBlock(i, 8)->setPiece(bBishop);
                 break;
             }
             case 4:{
-                Queen* wQueen = (Queen*) new Piece("w", this->getBlock(i, 1), this);
-                this->bKing = (King*) new Piece("b", this->getBlock(i, 8), this);
+                Queen* wQueen = new Queen("w", this->getBlock(i, 1), this);
+                Queen* bQueen = new Queen("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wQueen);
-                this->getBlock(i, 8)->setPiece(bKing);
+                this->getBlock(i, 8)->setPiece(bQueen);
                 break;
             }
             case 5:{
-                this->wKing = (King*) new Piece("w", this->getBlock(i, 1), this);
-                Queen* bQueen = (Queen*) new Piece("b", this->getBlock(i, 8), this);
+                this->wKing = new King("w", this->getBlock(i, 1), this);
+                this->bKing = new King("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wKing);
-                this->getBlock(i, 8)->setPiece(bQueen);
+                this->getBlock(i, 8)->setPiece(bKing);
                 break;
             }
         }
