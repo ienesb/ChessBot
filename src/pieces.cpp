@@ -550,7 +550,7 @@ int Pawn::checkMove(Block* target){
     return 0;
 }
 
-Piece::Piece(std::string color, Block block, Game game) {
+Piece::Piece(std::string color, Block* block, Game* game) {
     this->color = color;
     this->block = block;
     this->game = game;
