@@ -13,7 +13,7 @@ class Block : public QLabel{
     private:
     Piece* piece;
     Game* game;
-    char color; // "w" or "b"
+    std::string color; // "w" or "b"
     int x; //coordinates
     int y;
 
