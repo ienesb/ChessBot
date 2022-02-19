@@ -10,12 +10,12 @@ class Block;
 class Game{
 private:
     int numberOfPlayer{};
-    Block* board[64]{};
     King* wKing;
     King* bKing;
     
 public:
-    Game();
+    Block* board[64]{};
+    Game(QWidget* centralwidget);
     void press(Block* pressed);
     Block* getBlock(int x, int y);
     King* getKing(std::string color); 
