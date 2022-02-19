@@ -13,6 +13,7 @@ class Piece{
     Block* getBlock();
     std::string getColor();
     virtual int checkMove(Block* target);
+    Game* getGame();
 };
 
 class Knight: public Piece{
