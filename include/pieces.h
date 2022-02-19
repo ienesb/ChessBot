@@ -1,6 +1,12 @@
 #ifndef PIECES
 #define PIECES
 
+#include "game.h"
+#include "block.h"
+
+class Game;
+class Block;
+
 class Piece{
     private:
     std::string color; // "w" or "b" 

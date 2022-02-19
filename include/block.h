@@ -6,6 +6,9 @@
 #include <QApplication>
 #include <QLabel>
 
+#include "game.h"
+#include "pieces.h"
+
 class Piece;
 class Game;
 

@@ -1,5 +1,9 @@
 #ifndef GAME
 #define GAME
+
+#include "block.h"
+#include "pieces.h"
+
 class Piece;
 class Block;
 

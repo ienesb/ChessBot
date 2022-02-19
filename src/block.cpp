@@ -1,5 +1,9 @@
 #include <iostream>
+#include <vector>
+
+#include "game.h"
 #include "block.h"
+#include "pieces.h"
 
 void Block::mousePressEvent(QMouseEvent *ev){
     this->game->press(this);

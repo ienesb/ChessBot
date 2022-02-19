@@ -1,5 +1,8 @@
 #include <iostream>
+
 #include "game.h"
+#include "block.h"
+#include "pieces.h"
 
 Game::Game() {
 

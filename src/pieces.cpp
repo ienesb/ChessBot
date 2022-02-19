@@ -20,6 +20,7 @@ piyon   pawn 5
 
 #include <iostream>
 #include <vector>
+
 #include "game.h"
 #include "block.h"
 #include "pieces.h"
