@@ -17,6 +17,7 @@ public:
     Game();
     void press(Block* pressed);
     Block* getBlock(int x, int y);
+    Piece* getKing(std::string color); 
     void performMovement(Piece* piece, Block* target);
     
 };

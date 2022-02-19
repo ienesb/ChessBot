@@ -1,3 +1,5 @@
+#include <QtWidgets/QLabel>
+
 #include <iostream>
 #include <vector>
 
@@ -9,7 +11,15 @@ void Block::mousePressEvent(QMouseEvent *ev){
     this->game->press(this);
 }
 
-Block::Block(QDialog *Dialog, Game* game, int x, int y, Piece* piece=nullptr) : QLabel::QLabel(Dialog){
+Block::Block(QDialog *dialog, Game* game, int x, int y):QLabel::QLabel(dialog){
+    this->game = game;
+    this->x = x;
+    this->y = y;
+    this->piece = nullptr;
+           
+}
+
+Block::Block(QDialog *dialog, Game* game, int x, int y, Piece* piece):QLabel::QLabel(dialog){
     this->game = game;
     this->x = x;
     this->y = y;
@@ -25,8 +35,8 @@ Piece* Block::getPiece(){
     return piece;
 }
 
-vector<int> Block::getCoordinates(){
-    vector<int> coordinates{x,y};
+std::vector<int> Block::getCoordinates(){
+    std::vector<int> coordinates{x,y};
     return coordinates;
 }
 

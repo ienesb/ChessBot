@@ -12,12 +12,12 @@ void Game::press(Block *pressed) {
 
 }
 
-Block *Game::getBlock(int x, int y) {
-    return nullptr;
-}
-
 Block* Game::getBlock(int x, int y){
     return board[63-8*y+x];
+}
+
+Piece* Game::getKing(std::string color){
+    
 }
 
 void Game::performMovement(Piece* piece, Block* target){
