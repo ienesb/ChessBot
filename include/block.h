@@ -9,6 +9,7 @@
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <QPixmap>
+#include <opencv2/opencv.hpp>
 
 #include <iostream>
 #include <vector>
@@ -28,6 +29,7 @@ class Block : public QLabel{
     int y;
 
     public:
+    cv::Mat image, clickedImage;
     bool isClicked;
     std::string path;
     std::string clickedPath;

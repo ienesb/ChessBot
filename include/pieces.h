@@ -1,6 +1,8 @@
 #ifndef PIECES
 #define PIECES
 
+#include <opencv2/opencv.hpp>
+
 #include "game.h"
 #include "block.h"
 
@@ -15,6 +17,8 @@ class Piece{
 
     public:
     std::string path = "";
+    std::string name = "";
+    cv::Mat image;
     Piece(std::string color, Block* block, Game* game);
     void setBlock(Block* block);
     Block* getBlock();
