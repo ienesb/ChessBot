@@ -23,6 +23,8 @@ private:
     int numberOfPlayer{};
     King* wKing;
     King* bKing;
+    Block* chosen;
+    std::string turn;
     
 public:
     Block* board[64]{};

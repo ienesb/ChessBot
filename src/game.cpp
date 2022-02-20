@@ -67,16 +67,42 @@ Game::Game(QWidget* centralwidget) {
             }
         }
     }
+    this->chosen = nullptr;
+    this->turn = "w";
     this->update();
 }
 
 void Game::press(Block *pressed) {
-    if(pressed->isClicked){
-        pressed->isClicked = false;
+
+    if(this->chosen == nullptr){
+        if(pressed->getPiece() != nullptr && pressed->getPiece()->getColor() == this->turn){
+            chosen = pressed;
+            pressed->isClicked = true;
+        }
     }
     else{
-        pressed->isClicked = true;
+        if(pressed == chosen){
+            pressed->isClicked = false;
+            chosen = nullptr;
+        }
+        else if(pressed->getPiece() != nullptr && pressed->getPiece()->getColor() == this->turn){
+            chosen->isClicked = false;
+            chosen = pressed;
+            pressed->isClicked = true;
+        }
+        else{
+            int code;
+            chosen->getPiece()->checkMove(pressed);
+            if(code == 0){
+                std::cout << "success\n";
+                chosen->isClicked = false;
+            }
+            else{
+                std::cout << "error " << code << "\n";
+            }
+        }
     }
+
     this->update();
 
 }
