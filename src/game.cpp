@@ -91,8 +91,8 @@ void Game::press(Block *pressed) {
             pressed->isClicked = true;
         }
         else{
-            int code;
-            chosen->getPiece()->checkMove(pressed);
+            int code = chosen->getPiece()->checkMove(pressed);;
+
             if(code == 0){
                 std::cout << "success\n";
                 chosen->isClicked = false;

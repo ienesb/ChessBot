@@ -65,8 +65,9 @@ bool isValid(std::vector<int>current, std::vector<int>target, const int piece, G
                 else if (((current[0] == target[0]) and (target[1] - current[1] == 2)) and current[1] == 2)
                     return true;
                 else if (((abs(current[0] - target[0]) == 1) and (target[1] - current[1] == 1))
-                         and (game->getBlock(current[0], current[1])->getPiece()->getColor() !=
-                              game->getBlock(target[0], target[1])->getPiece()->getColor())) return true;
+                    and (game->getBlock(target[0], target[1])->getPiece() != nullptr)
+                    and (game->getBlock(current[0], current[1])->getPiece()->getColor() !=
+                    game->getBlock(target[0], target[1])->getPiece()->getColor())) return true;
                 else return false;
             }
                 // BLACK PAWN
@@ -75,8 +76,9 @@ bool isValid(std::vector<int>current, std::vector<int>target, const int piece, G
                 else if (((current[0] == target[0]) and (target[1] - current[1] == -2)) and current[1] == 7)
                     return true;
                 else if (((abs(current[0] - target[0]) == 1) and (target[1] - current[1] == -1))
-                         and (game->getBlock(current[0], current[1])->getPiece()->getColor() !=
-                              game->getBlock(target[0], target[1])->getPiece()->getColor())) return true;
+                    and (game->getBlock(target[0], target[1])->getPiece() != nullptr)
+                    and (game->getBlock(current[0], current[1])->getPiece()->getColor() !=
+                    game->getBlock(target[0], target[1])->getPiece()->getColor())) return true;
                 else return false;
             }
     }
@@ -523,43 +525,37 @@ int checkMove_all(Piece* piece,Block* target, const int identifier){
 int Knight::checkMove(Block* target){
     // unique number to identify piece
     const int identifier = KNIGHT;
-    checkMove_all(this, target, identifier);
-    return 0;
+    return checkMove_all(this, target, identifier);
 }
 
 int Bishop::checkMove(Block* target){
     // unique number to identify piece
     const int identifier = BISHOP;
-    checkMove_all(this, target, identifier);
-    return 0;
+    return checkMove_all(this, target, identifier);
 }
 
 int Rook::checkMove(Block* target){
     // unique number to identify piece
     const int identifier = ROOK;
-    checkMove_all(this, target, identifier);
-    return 0;
+    return checkMove_all(this, target, identifier);
 }
 
 int Queen::checkMove(Block* target){
     // unique number to identify piece
     const int identifier = QUEEN;
-    checkMove_all(this, target, identifier);
-    return 0;
+    return checkMove_all(this, target, identifier);
 }
 
 int King::checkMove(Block* target){
     // unique number to identify piece
     const int identifier = KING;
-    checkMove_all(this, target, identifier);
-    return 0;
+    return checkMove_all(this, target, identifier);
 }
 
 int Pawn::checkMove(Block* target){
     // unique number to identify piece
     const int identifier = PAWN;
-    checkMove_all(this, target, identifier);
-    return 0;
+    return checkMove_all(this, target, identifier);
 }
 
 Piece::Piece(std::string color, Block* block, Game* game) {
