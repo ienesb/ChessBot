@@ -25,13 +25,15 @@ class Block : public QLabel{
     Piece* piece;
     Game* game;
     std::string color; // "w" or "b"
+    std::string name;
     int x; //coordinates
     int y;
 
     public:
-    cv::Mat image, clickedImage;
+    cv::Mat whiteImage, blackImage, clickedImage;
     bool isClicked;
-    std::string path;
+    std::string whitePath;
+    std::string blackPath;
     std::string clickedPath;
     void mousePressEvent(QMouseEvent *ev);
     Block(QWidget* widget, Game* game, int x, int y);

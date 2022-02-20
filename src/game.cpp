@@ -8,6 +8,7 @@
 #include <QPixmap>
 
 #include <iostream>
+#include <vector>
 
 #include "game.h"
 #include "block.h"
@@ -70,6 +71,13 @@ Game::Game(QWidget* centralwidget) {
 }
 
 void Game::press(Block *pressed) {
+    if(pressed->isClicked){
+        pressed->isClicked = false;
+    }
+    else{
+        pressed->isClicked = true;
+    }
+    this->update();
 
 }
 

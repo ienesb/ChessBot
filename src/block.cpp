@@ -28,16 +28,21 @@ Block::Block(QWidget* widget, Game* game, int x, int y):QLabel::QLabel(widget){
     this->piece = nullptr;
     this->isClicked = false;
     
-    if((x+y)%2 == 0){
-        this->path = "../pngs/base/black.png";
-        this->image = cv::imread("../pngs/base/black.png", 1); 
-    }
-    else{
-        this->path = "../pngs/base/white.png";
-        this->image = cv::imread("../pngs/base/white.png", 1);
-    }
+    this->whitePath = "../pngs/base/white.png";
+    this->whiteImage = cv::imread("../pngs/base/white.png", 1); 
+    this->blackPath = "../pngs/base/black.png";
+    this->blackImage = cv::imread("../pngs/base/black.png", 1);
     this->clickedPath = "../pngs/base/red.png";
     this->clickedImage = cv::imread("../pngs/base/red.png", 1);
+
+    this->name = std::to_string(x) + "-" + std::to_string(y) + ".png";
+
+    if ((x+y)%2 == 0){
+        this->color = "b";
+    }
+    else{
+        this->color = "w";
+    }
     
     this->setGeometry(QRect((x-1)*SIZE, (8-y)*SIZE, SIZE, SIZE));
 
@@ -67,8 +72,11 @@ void Block::update(){
         if(this->isClicked){
             image = new QPixmap(this->clickedPath.c_str());
         }
+        else if(this->color == "w"){
+            image = new QPixmap(this->whitePath.c_str());
+        }
         else{
-            image = new QPixmap(this->path.c_str());
+            image = new QPixmap(this->blackPath.c_str());
         }
     }
     else{
@@ -76,8 +84,11 @@ void Block::update(){
         if(this->isClicked){
             baseImage = this->clickedImage;
         }
+        else if(this->color == "w"){
+            baseImage = this->whiteImage;
+        }
         else{
-            baseImage = this->image;
+            baseImage = this->blackImage;
         }
 
         // pieceImage = cv::imread(this->piece->path ,1);
@@ -110,8 +121,8 @@ void Block::update(){
         
         cv::resize(baseImage, baseImage, cv::Size(SIZE, SIZE), cv::INTER_LINEAR);
 
-        cv::imwrite(".temppng.png", baseImage);
-        image = new QPixmap(".temppng.png");
+        cv::imwrite(name, baseImage);
+        image = new QPixmap(name.c_str());
 
     }
     this->setPixmap(*image);
