@@ -86,6 +86,12 @@ bool isSame(std::vector<int>current, std::vector<int>target){
     else return false;
 }
 
+bool checkXY(int x, int y){
+    if(x >= 1 and y >= 1 and x < 9 and y < 9)
+        return true;
+    return false;
+}
+
 bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece, Game *game) {
     switch (piece) {
         case KNIGHT:
@@ -97,7 +103,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                 do {
                     x++;
                     y++;
-                    if (game->getBlock(x, y)->getPiece()) return true;
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                 }while (x != target[0] and y != target[1]);
                 return false;
             }
@@ -106,7 +112,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                 do {
                     x++;
                     y--;
-                    if (game->getBlock(x, y)->getPiece()) return true;
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                 }while (x != target[0] and y != target[1]);
                 return false;
             }
@@ -115,7 +121,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                 do {
                     x--;
                     y++;
-                    if (game->getBlock(x, y)->getPiece()) return true;
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                 }while (x != target[0] and y != target[1]);
                 return false;
             }
@@ -124,7 +130,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                 do {
                     x--;
                     y--;
-                    if (game->getBlock(x, y)->getPiece()) return true;
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                 }while (x != target[0] and y != target[1]);
                 return false;
             }
@@ -209,7 +215,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                     do {
                         x++;
                         y++;
-                        if (game->getBlock(x, y)->getPiece()) return true;
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     }while (x != target[0] and y != target[1]);
                     return false;
                 }
@@ -218,7 +224,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                     do {
                         x++;
                         y--;
-                        if (game->getBlock(x, y)->getPiece()) return true;
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     }while (x != target[0] and y != target[1]);
                     return false;
                 }
@@ -227,7 +233,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                     do {
                         x--;
                         y++;
-                        if (game->getBlock(x, y)->getPiece()) return true;
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     }while (x != target[0] and y != target[1]);
                     return false;
                 }
@@ -236,7 +242,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                     do {
                         x--;
                         y--;
-                        if (game->getBlock(x, y)->getPiece()) return true;
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     }while (x != target[0] and y != target[1]);
                     return false;
                 }
@@ -258,13 +264,17 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
 }
 
 bool isSameColor(std::vector<int>current, std::vector<int>target, Game *game){
-    if(game->getBlock(current[0],current[1])->getPiece()->getColor() ==
-       game->getBlock(target[0],target[1])->getPiece()->getColor())
-        return true;
+    if(game->getBlock(target[0],target[1])->getPiece() != nullptr){
+        if(game->getBlock(current[0],current[1])->getPiece()->getColor() ==
+           game->getBlock(target[0],target[1])->getPiece()->getColor())
+            return true;
+    }
     else return false;
 }
 
 bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
+    // TODO: you dont examine the check situation according to the state after movement.
+    //       you still examine regarding the current state. Fix this issue.
     auto king = game->getKing(game->getBlock(current[0],current[1])->getPiece()->getColor());
     auto kingCoord(king->getBlock()->getCoordinates());
     auto kingColor = king->getColor();
@@ -273,7 +283,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // FORWARD
     y++;
     for (; y<=8; y++){
-        if (game->getBlock(x,y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Rook).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -287,7 +297,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // DOWNWARD
     y--;
     for (; y>=1; y--) {
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Rook).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -301,7 +311,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // RIGHT
     x++;
     for (; x<=8; x++){
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Rook).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -315,7 +325,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // LEFT
     x--;
     for (; x>=1; x--){
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Rook).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -329,7 +339,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // FORWARD, RIGHT
     x++;
     y++;
-    if (game->getBlock(x, y)->getPiece()){
+    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()){
         if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Pawn).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor()){
             return true;
@@ -338,7 +348,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     while (x != 9 and y != 9) {
         x++;
         y++;
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Bishop).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -353,7 +363,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // FORWARD, LEFT
     x--;
     y++;
-    if (game->getBlock(x, y)->getPiece()){
+    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()){
         if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Pawn).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor()){
             return true;
@@ -362,7 +372,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     while (x != 0 and y != 9) {
         x--;
         y++;
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Bishop).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -377,7 +387,8 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // DOWNWARD, RIGHT
     x++;
     y--;
-    if (game->getBlock(x, y)->getPiece()){
+
+    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()){
         if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Pawn).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor()){
             return true;
@@ -386,7 +397,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     while (x != 9 and y != 0) {
         x++;
         y--;
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Bishop).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -401,7 +412,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // DOWNWARD, LEFT
     x--;
     y--;
-    if (game->getBlock(x, y)->getPiece()){
+    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()){
         if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Pawn).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor()){
             return true;
@@ -410,7 +421,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     while (x != 0 and y != 0) {
         x--;
         y--;
-        if (game->getBlock(x, y)->getPiece()) {
+        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) {
             if (typeid(game->getBlock(x, y)->getPiece()).name() == typeid(Bishop).name()
                 and kingColor != game->getBlock(x, y)->getPiece()->getColor())
                 return true;
@@ -428,7 +439,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 1 FORWARD, 2 RIGHT
     x_move = 2;
     y_move = 1;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -436,7 +447,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 1 FORWARD, 2 LEFT
     x_move = -2;
     y_move = 1;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -444,7 +455,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 1 DOWNWARD, 2 RIGHT
     x_move = 2;
     y_move = -1;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -452,7 +463,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 1 DOWNWARD, 2 LEFT
     x_move = -2;
     y_move = -1;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -460,7 +471,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 2 FORWARD, 1 RIGHT
     x_move = 1;
     y_move = 2;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -468,7 +479,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 2 FORWARD, 1 LEFT
     x_move = -1;
     y_move = 2;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -476,7 +487,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 2 DOWNWARD, 1 RIGHT
     x_move = 1;
     y_move = -2;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;
@@ -484,7 +495,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // 2 DOWNWARD, 1 LEFT
     x_move = -1;
     y_move = -2;
-    if (game->getBlock(x+x_move, y+y_move)->getPiece()) {
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move, y+y_move)->getPiece()) {
         if (typeid(game->getBlock(x+x_move, x+x_move)->getPiece()).name() == typeid(Knight).name()
             and kingColor != game->getBlock(x, y)->getPiece()->getColor())
             return true;

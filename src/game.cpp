@@ -108,7 +108,10 @@ void Game::press(Block *pressed) {
 }
 
 Block* Game::getBlock(int x, int y){
-    return board[63-8*y+x];
+    if(x >= 1 and y >= 1 and x < 9 and y < 9)
+        return board[63-8*y+x];
+    else
+        return nullptr;
 }
 
 King* Game::getKing(std::string color){
