@@ -31,5 +31,4 @@ void GameUi::setupUi(QMainWindow *MainWindow){
 
 void GameUi::retranslateUi(QMainWindow *MainWindow){
     MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-    this->game->update();
 } // retranslateUi

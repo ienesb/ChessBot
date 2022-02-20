@@ -78,7 +78,7 @@ bool isValid(std::vector<int>current, std::vector<int>target, const int piece, G
                 else return false;
             }
     }
-};
+}
 bool isSame(std::vector<int>current, std::vector<int>target){
     if ((current[0] == target[0]) && (current[1] == target[1])) return true;
     else return false;
@@ -253,7 +253,7 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
             return false;
     }
 
-};
+}
 
 bool isSameColor(std::vector<int>current, std::vector<int>target, Game *game){
     if(game->getBlock(current[0],current[1])->getPiece()->getColor() ==
