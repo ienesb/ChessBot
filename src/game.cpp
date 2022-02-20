@@ -95,7 +95,9 @@ void Game::press(Block *pressed) {
 
             if(code == 0){
                 std::cout << "success\n";
+                this->performMovement(chosen->getPiece(), pressed);
                 chosen->isClicked = false;
+                chosen = nullptr;
             }
             else{
                 std::cout << "error " << code << "\n";
@@ -125,6 +127,12 @@ void Game::performMovement(Piece* piece, Block* target){
     piece->getBlock()->setPiece(nullptr);
     piece->setBlock(target);
     target->setPiece(piece);
+    if(this->turn == "w"){
+        this->turn = "b";
+    }
+    else{
+        this->turn = "w";
+    }
     this->update();
 }
 
