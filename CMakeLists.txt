@@ -10,7 +10,7 @@ include_directories(include)
 file(GLOB HEADERS "include/*.h")
 file(GLOB SOURCES "src/*.cpp")
 
-add_executable(main ${SOURCES} ${HEADERS})
+add_executable(chess ${SOURCES} ${HEADERS})
 
-target_link_libraries(main ${OpenCV_LIBS})
-target_link_libraries(main Qt5::Widgets)
+target_link_libraries(chess ${OpenCV_LIBS})
+target_link_libraries(chess Qt5::Widgets)
