@@ -43,14 +43,14 @@ bool isValid(std::vector<int>current, std::vector<int>target, const int piece, G
                 return true;
             else return false;
         case BISHOP:
-            if (current[0] - target[0] == current[1] - target[1]) return true;
+            if (abs(current[0] - target[0]) == abs(current[1] - target[1])) return true;
             else return false;
         case ROOK:
             if ((current[0] == target[0]) or (current[1] == target[1])) return true;
             else return false;
         case QUEEN:
             if (((current[0] == target[0]) or (current[1] == target[1])) or
-                (current[0] - target[0] == current[1] - target[1])) return true;
+                    abs(current[0] - target[0]) == abs(current[1] - target[1])) return true;
             else return false;
         case KING:
             if (((abs(current[0] - target[0]) == 1) and (abs(current[1] - target[1]) == 1))
@@ -61,9 +61,13 @@ bool isValid(std::vector<int>current, std::vector<int>target, const int piece, G
         case PAWN:
             // WHITE PAWN
             if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "w"){
-                if ((current[0] == target[0]) and (target[1] - current[1] == 1)) return true;
+
+                if ((current[0] == target[0]) and (target[1] - current[1] == 1)
+                and game->getBlock(target[0], target[1])->getPiece() == nullptr) return true;
+
                 else if (((current[0] == target[0]) and (target[1] - current[1] == 2)) and current[1] == 2)
                     return true;
+
                 else if (((abs(current[0] - target[0]) == 1) and (target[1] - current[1] == 1))
                     and (game->getBlock(target[0], target[1])->getPiece() != nullptr)
                     and (game->getBlock(current[0], current[1])->getPiece()->getColor() !=
@@ -72,7 +76,10 @@ bool isValid(std::vector<int>current, std::vector<int>target, const int piece, G
             }
                 // BLACK PAWN
             else if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "b"){
-                if ((current[0] == target[0]) and (target[1] - current[1] == -1)) return true;
+
+                if ((current[0] == target[0]) and (target[1] - current[1] == -1)
+                and game->getBlock(target[0], target[1])->getPiece() == nullptr) return true;
+
                 else if (((current[0] == target[0]) and (target[1] - current[1] == -2)) and current[1] == 7)
                     return true;
                 else if (((abs(current[0] - target[0]) == 1) and (target[1] - current[1] == -1))
@@ -102,38 +109,46 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
             int x = current[0], y = current[1];
             // FORWARD, RIGHT
             if (current[0] < target[0] and current[1] < target[1]) {
-                do {
+                x++;
+                y++;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     x++;
                     y++;
-                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                }while (x != target[0] and y != target[1]);
+                }
                 return false;
             }
                 // DOWNWARD, RIGHT
             else if (current[0] < target[0] and current[1] > target[1]) {
-                do {
+                x++;
+                y--;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     x++;
                     y--;
-                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                }while (x != target[0] and y != target[1]);
+                }
                 return false;
             }
                 // FORWARD, LEFT
             else if (current[0] > target[0] and current[1] < target[1]) {
-                do {
+                x--;
+                y++;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     x--;
                     y++;
-                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                }while (x != target[0] and y != target[1]);
+                }
                 return false;
             }
                 // DOWNWARD, LEFT
             else if (current[0] > target[0] and current[1] > target[1]) {
-                do {
+                x--;
+                y--;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                     x--;
                     y--;
-                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                }while (x != target[0] and y != target[1]);
+                }
                 return false;
             }
         }
@@ -160,14 +175,14 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                 // RIGHT
                 if (current[0] < target[0]){
                     for (int i = current[0]+1; i<target[0]; i++){
-                        if (game->getBlock(current[1],i)->getPiece()) return true;
+                        if (game->getBlock(i,current[1])->getPiece()) return true;
                     }
                     return false;
                 }
                     // LEFT
                 else if (current[0] > target[0]){
                     for (int i = current[0]-1; i>target[0]; i--){
-                        if (game->getBlock(current[1],i)->getPiece()) return true;
+                        if (game->getBlock(i,current[1])->getPiece()) return true;
                     }
                     return false;
                 }
@@ -196,56 +211,64 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
                     // RIGHT
                     if (current[0] < target[0]){
                         for (int i = current[0]+1; i<target[0]; i++){
-                            if (game->getBlock(current[1],i)->getPiece()) return true;
+                            if (game->getBlock(i,current[1])->getPiece()) return true;
                         }
                         return false;
                     }
                         // LEFT
                     else if (current[0] > target[0]){
                         for (int i = current[0]-1; i>target[0]; i--){
-                            if (game->getBlock(current[1],i)->getPiece()) return true;
+                            if (game->getBlock(i,current[1])->getPiece()) return true;
                         }
                         return false;
                     }
                 }
             }
                 // IF THE MOVEMENT IS OF BISHOP
-            else if (current[0] - target[0] == current[1] - target[1]){
+            else if (abs(current[0] - target[0]) == abs(current[1] - target[1])){
                 int x = current[0], y = current[1];
                 // FORWARD, RIGHT
                 if (current[0] < target[0] and current[1] < target[1]) {
-                    do {
+                    x++;
+                    y++;
+                    while (x != target[0] and y != target[1]){
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                         x++;
                         y++;
-                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                    }while (x != target[0] and y != target[1]);
+                    }
                     return false;
                 }
                     // DOWNWARD, RIGHT
                 else if (current[0] < target[0] and current[1] > target[1]) {
-                    do {
+                    x++;
+                    y--;
+                    while (x != target[0] and y != target[1]){
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                         x++;
                         y--;
-                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                    }while (x != target[0] and y != target[1]);
+                    }
                     return false;
                 }
                     // FORWARD, LEFT
                 else if (current[0] > target[0] and current[1] < target[1]) {
-                    do {
+                    x--;
+                    y++;
+                    while (x != target[0] and y != target[1]){
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                         x--;
                         y++;
-                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                    }while (x != target[0] and y != target[1]);
+                    }
                     return false;
                 }
                     // DOWNWARD, LEFT
                 else if (current[0] > target[0] and current[1] > target[1]) {
-                    do {
+                    x--;
+                    y--;
+                    while (x != target[0] and y != target[1]){
+                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
                         x--;
                         y--;
-                        if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
-                    }while (x != target[0] and y != target[1]);
+                    }
                     return false;
                 }
             }
@@ -253,14 +276,14 @@ bool isBlocked(std::vector<int>current, std::vector<int>target, const int piece,
             return false;
         case PAWN:
             if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "w"){
-                if (((current[0] == target[0]) and (target[1] - current[1] == 2)) and current[1] == 1)
+                if (((current[0] == target[0]) and (target[1] - current[1] == 2)) and current[1] == 2)
                     if(game->getBlock(current[0], current[1]+1)->getPiece()) return true;
                 return false;
             }
             else if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "b")
                 if (((current[0] == target[0]) and (target[1] - current[1] == -2)) and current[1] == 7)
-                    if(game->getBlock(current[0], current[1]+1)->getPiece()) return true;
-            return false;
+                    if(game->getBlock(current[0], current[1]-1)->getPiece()) return true;
+                return false;
     }
 
 }
@@ -271,7 +294,7 @@ bool isSameColor(std::vector<int>current, std::vector<int>target, Game *game){
            game->getBlock(target[0],target[1])->getPiece()->getColor())
             return true;
     }
-    else return false;
+    return false;
 }
 
 bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
