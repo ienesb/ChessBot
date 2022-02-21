@@ -296,6 +296,7 @@ bool isSameColor(std::vector<int>current, std::vector<int>target, Game *game){
     return false;
 }
 
+// It is for examining the check situation after movement.
 Piece* tempGetPiece(int x, int y, std::vector<int>current, std::vector<int>target, Piece* currentPiece, Game* game){
     if(x == current[0] and y == current[1]){
         return nullptr;
@@ -307,8 +308,6 @@ Piece* tempGetPiece(int x, int y, std::vector<int>current, std::vector<int>targe
 }
 
 bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
-    // TODO: you dont examine the check situation according to the state after movement.
-    //       you still examine regarding the current state. Fix this issue.
     auto king = game->getKing(game->getBlock(current[0],current[1])->getPiece()->getColor());
     auto kingCoord(king->getBlock()->getCoordinates());
     auto kingColor = king->getColor();
