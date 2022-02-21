@@ -313,6 +313,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     auto kingColor = king->getColor();
     auto currentPiece = game->getBlock(current[0],current[1])->getPiece();
 
+    // Checking if the piece that moves is the king
     if(game->getBlock(current[0],current[1])->getPiece()->name == "sah")
         kingCoord = target;
 
