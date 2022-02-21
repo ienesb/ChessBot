@@ -29,11 +29,8 @@ Block::Block(QWidget* widget, Game* game, int x, int y):QLabel::QLabel(widget){
     this->isClicked = false;
     
     this->whitePath = "../pngs/base/white.png";
-    this->whiteImage = cv::imread("../pngs/base/white.png", 1); 
     this->blackPath = "../pngs/base/black.png";
-    this->blackImage = cv::imread("../pngs/base/black.png", 1);
     this->clickedPath = "../pngs/base/red.png";
-    this->clickedImage = cv::imread("../pngs/base/red.png", 1);
 
     this->name = std::to_string(x) + "-" + std::to_string(y) + ".png";
 
@@ -80,45 +77,25 @@ void Block::update(){
         }
     }
     else{
-        cv::Mat baseImage, pieceImage;
+        cv::Mat baseImage;
+
         if(this->isClicked){
-            baseImage = this->clickedImage;
+            baseImage = cv::imread(this->clickedPath, 1);
         }
         else if(this->color == "w"){
-            baseImage = this->whiteImage;
+            baseImage = cv::imread(this->whitePath, 1);
         }
         else{
-            baseImage = this->blackImage;
+            baseImage = cv::imread(this->blackPath, 1);
         }
-
-        // pieceImage = cv::imread(this->piece->path ,1);
-        if(this->piece->name == "kale"){
-            if(this->piece->getColor() == "w"){
-                baseImage.setTo(255, cv::imread("../pngs/pieces/kale.png", 1)==255);
-            }
-            else{
-                baseImage.setTo(0, cv::imread("../pngs/pieces/kale.png", 1)==255);
-            }
-        }
-        else if(this->piece->name == "piyon"){
-            if(this->piece->getColor() == "w"){
-                baseImage.setTo(255, cv::imread("../pngs/pieces/piyon.png", 1)==255);
-            }
-            else{
-                baseImage.setTo(0, cv::imread("../pngs/pieces/piyon.png", 1)==255);
-            }
+        
+        if(this->piece->getColor() == "w"){
+            baseImage.setTo(255, this->piece->image==255);
         }
         else{
-            if(this->piece->getColor() == "w"){
-                baseImage.setTo(255, this->piece->image==255);
-            }
-            else{
-                baseImage.setTo(0, this->piece->image==255);
-            }
-
+            baseImage.setTo(0, this->piece->image==255);
         }
-        
-        
+
         cv::resize(baseImage, baseImage, cv::Size(SIZE, SIZE), cv::INTER_LINEAR);
 
         cv::imwrite(name, baseImage);

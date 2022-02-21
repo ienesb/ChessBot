@@ -30,7 +30,6 @@ class Block : public QLabel{
     int y;
 
     public:
-    cv::Mat whiteImage, blackImage, clickedImage;
     bool isClicked;
     std::string whitePath;
     std::string blackPath;
