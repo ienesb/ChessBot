@@ -1,0 +1,9 @@
+isCheckmate():
+1. Find the possible escape blocks for the King.
+	a) For every direction with radius 1, check whether it is blocked by its own pieces.
+	b) Eliminate those with the pieces colored in the King's color.	
+	b) Use checkMove() to find whether the king is still under attack after movement.
+ 	c) If not: return false;
+	d) If yes: continue;
+2. Check whether the path between the king and the attacker can be blocked.
+	a)
