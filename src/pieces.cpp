@@ -393,9 +393,6 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
             if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "fil"
                 and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
-//            auto idk = tempGetPiece(x, y, current, target, currentPiece, game);
-//            std::cout << "queen? = " << typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() << typeid(Queen).name() << "\n";
-//            std::cout << "not same color? = " << kingColor << tempGetPiece(x, y, current, target, currentPiece, game)->getColor() << "\n";
             if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "vezir"
                      and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
