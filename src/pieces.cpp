@@ -413,6 +413,8 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
             return true;
         }
     }
+    x = kingCoord[0];
+    y = kingCoord[1];
     while (x != 0 and y != 9) {
         x--;
         y++;
@@ -431,13 +433,14 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     // DOWNWARD, RIGHT
     x++;
     y--;
-
     if (checkXY(x, y) and tempGetPiece(x, y, current, target, currentPiece, game)){
         if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "piyon"
             and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor()){
             return true;
         }
     }
+    x = kingCoord[0];
+    y = kingCoord[1];
     while (x != 9 and y != 0) {
         x++;
         y--;
@@ -462,6 +465,8 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
             return true;
         }
     }
+    x = kingCoord[0];
+    y = kingCoord[1];
     while (x != 0 and y != 0) {
         x--;
         y--;
