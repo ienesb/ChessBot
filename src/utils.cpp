@@ -280,6 +280,7 @@ bool isSameColor(std::vector<int>current, std::vector<int>target, Game *game){
     return false;
 }
 
+// It is for checkMove_all().
 bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     auto king = game->getKing(game->getBlock(current[0],current[1])->getPiece()->getColor());
     auto kingCoord(king->getBlock()->getCoordinates());
@@ -295,10 +296,10 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     y++;
     for (; y<=8; y++){
         if (checkXY(x, y) and tempGetPiece(x, y, current, target, currentPiece, game)) {
-            if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Rook).name()
+            if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "kale"
                 and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
-            else if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Queen).name()
+            else if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "vezir"
                      and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
             break;
@@ -309,10 +310,10 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     y--;
     for (; y>=1; y--) {
         if (checkXY(x, y) and tempGetPiece(x, y, current, target, currentPiece, game)) {
-            if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Rook).name()
+            if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "kale"
                 and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
-            else if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Queen).name()
+            else if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "vezir"
                      and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
             break;
@@ -323,10 +324,10 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     x++;
     for (; x<=8; x++){
         if (checkXY(x, y) and tempGetPiece(x, y, current, target, currentPiece, game)) {
-            if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Rook).name()
+            if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "kale"
                 and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
-            else if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Queen).name()
+            else if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "vezir"
                      and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
             break;
@@ -337,10 +338,10 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     x--;
     for (; x>=1; x--){
         if (checkXY(x, y) and tempGetPiece(x, y, current, target, currentPiece, game)) {
-            if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Rook).name()
+            if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "kale"
                 and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
-            else if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Queen).name()
+            else if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "vezir"
                      and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor())
                 return true;
             break;
@@ -352,7 +353,7 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
     x++;
     y++;
     if (checkXY(x, y) and tempGetPiece(x, y, current, target, currentPiece, game)){
-        if (typeid(tempGetPiece(x, y, current, target, currentPiece, game)).name() == typeid(Pawn).name()
+        if (tempGetPiece(x, y, current, target, currentPiece, game)->name == "piyon"
             and kingColor != tempGetPiece(x, y, current, target, currentPiece, game)->getColor()){
             return true;
         }
@@ -520,5 +521,694 @@ bool isCheck(std::vector<int>current, std::vector<int>target, Game *game){
             and kingColor != tempGetPiece(x+x_move, y+y_move, current, target, currentPiece, game)->getColor())
             return true;
     }
+    return false;
+}
+
+int checkMove_all(Piece* piece,Block* target, const int identifier){
+    // getting coordinates
+    auto currentCoord(piece->getBlock()->getCoordinates());
+    auto targetCoord(target->getCoordinates());
+    // checking whether the move is valid
+    if(!isValid(currentCoord, targetCoord, identifier, piece->getGame())) return -1;
+    // checking whether the target position is the same as the current position
+    if(isSame(currentCoord, targetCoord)) return -5;
+    // checking whether the target piece does not have the same kingColor as the current piece.
+    if(isSameColor(currentCoord, targetCoord, piece->getGame())) return -3;
+    // checking whether a piece blocks the pathway
+    if(isBlocked(currentCoord, targetCoord, identifier, piece->getGame())) return -2;
+    // checking whether the movement causes check
+    if(isCheck(currentCoord, targetCoord, piece->getGame())) return -4;
+    return 0;
+}
+
+int checkMove_all(Piece* piece, int x, int y, const int identifier){
+    // getting coordinates
+    auto currentCoord(piece->getBlock()->getCoordinates());
+    const std::vector<int>targetCoord = {x, y};
+    // checking whether the move is valid
+    if(!isValid(currentCoord, targetCoord, identifier, piece->getGame())) return -1;
+    // checking whether the target position is the same as the current position
+    if(isSame(currentCoord, targetCoord)) return -5;
+    // checking whether the target piece does not have the same kingColor as the current piece.
+    if(isSameColor(currentCoord, targetCoord, piece->getGame())) return -3;
+    // checking whether a piece blocks the pathway
+    if(isBlocked(currentCoord, targetCoord, identifier, piece->getGame())) return -2;
+    // checking whether the movement causes check
+    if(isCheck(currentCoord, targetCoord, piece->getGame())) return -4;
+    return 0;
+}
+
+// It is used for Game class
+// If there is a check, it returns a vector contains the coordinates of the attacker,
+// If not, it returns an empty vector. You can check whether a vector is empty by "vector.empty()"
+std::vector<int> isCheck_Game(const std::string& kingColor, Game *game){
+    auto king = game->getKing(kingColor);
+    auto kingCoord(king->getBlock()->getCoordinates());
+
+    int x = kingCoord[0], y = kingCoord[1];
+    // FORWARD
+    y++;
+    for (; y<=8; y++){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    y = kingCoord[1];
+    // DOWNWARD
+    y--;
+    for (; y>=1; y--) {
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    y = kingCoord[1];
+    // RIGHT
+    x++;
+    for (; x<=8; x++){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    x = kingCoord[0];
+    // LEFT
+    x--;
+    for (; x>=1; x--){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // FORWARD, RIGHT
+    x++;
+    y++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor != game->getBlock(x,y)->getPiece()->getColor()){
+            return std::vector<int>{x, y};
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    while (x != 9 and y != 9) {
+        x++;
+        y++;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // FORWARD, LEFT
+    x--;
+    y++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor != game->getBlock(x,y)->getPiece()->getColor()){
+            return std::vector<int>{x, y};
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    while (x != 0 and y != 9) {
+        x--;
+        y++;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // DOWNWARD, RIGHT
+    x++;
+    y--;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor != game->getBlock(x,y)->getPiece()->getColor()){
+            return std::vector<int>{x, y};
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    while (x != 9 and y != 0) {
+        x++;
+        y--;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // DOWNWARD, LEFT
+    x--;
+    y--;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor != game->getBlock(x,y)->getPiece()->getColor()){
+            return std::vector<int>{x, y};
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+    while (x != 0 and y != 0) {
+        x--;
+        y--;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return std::vector<int>{x, y};
+            break;
+        }
+    }
+    x = kingCoord[0];
+    y = kingCoord[1];
+
+    int x_move, y_move;
+
+    // 1 FORWARD, 2 RIGHT
+    x_move = 2;
+    y_move = 1;
+
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 1 FORWARD, 2 LEFT
+    x_move = -2;
+    y_move = 1;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 1 DOWNWARD, 2 RIGHT
+    x_move = 2;
+    y_move = -1;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 1 DOWNWARD, 2 LEFT
+    x_move = -2;
+    y_move = -1;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 2 FORWARD, 1 RIGHT
+    x_move = 1;
+    y_move = 2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 2 FORWARD, 1 LEFT
+    x_move = -1;
+    y_move = 2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 2 DOWNWARD, 1 RIGHT
+    x_move = 1;
+    y_move = -2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    // 2 DOWNWARD, 1 LEFT
+    x_move = -1;
+    y_move = -2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return std::vector<int>{x+x_move, y+y_move};
+    }
+    return std::vector<int>{};
+}
+
+static bool isBlockEscapable(int x, int y, const std::string& kingColor, Game* game){
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+        if(!game->getBlock(x,y)->getPiece()){
+            return true;
+        }
+        if (kingColor != game->getBlock(x,y)->getPiece()->getColor())
+            return true;
+    }
+    return false;
+}
+
+static bool isEscapable(King* king, Game* game){
+    auto kingCoord(king->getBlock()->getCoordinates());
+    auto kingColor = king->getColor();
+
+    int x = kingCoord[0], y = kingCoord[1];
+    // FORWARD
+    y++;
+    if(isBlockEscapable(x, y, kingColor, game)
+    and checkMove_all(king, x, y, KING))
+        return true;
+    y = kingCoord[1];
+    // DOWNWARD
+    y--;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    y = kingCoord[1];
+    // RIGHT
+    x++;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    x = kingCoord[0];
+    // LEFT
+    x--;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    x = kingCoord[0];
+    // FORWARD, RIGHT
+    x++;
+    y++;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // FORWARD, LEFT
+    x--;
+    y++;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // DOWNWARD, RIGHT
+    x++;
+    y--;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    x = kingCoord[0];
+    y = kingCoord[1];
+    // DOWNWARD, LEFT
+    x--;
+    y--;
+    if(isBlockEscapable(x, y, kingColor, game)
+       and checkMove_all(king, x, y, KING))
+        return true;
+    return false;
+}
+static bool isBlockBlockable(int emptyBlock_x, int emptyBlock_y, const std::string& kingColor, Game* game){
+    // TODO: siyah ve beyaz piyonlar icin ayri case uygulaman gerekecek, because of siyahlar sadece geri(7->1)
+    //  beyazlar sadece ileri (2->8). Bu yuzden ornek olarak FORWARD olayinda bos karenin bir ilerisine baktiginda
+    //  siyah piyon ise bloklanabilir, degilse gg.
+    int x = emptyBlock_x, y = emptyBlock_y;
+    // FORWARD
+    y++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    y = emptyBlock_y;
+    y++;
+    for (; y<=8; y++){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    y = emptyBlock_y;
+    // DOWNWARD
+    y--;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    y = emptyBlock_y;
+    y--;
+    for (; y>=1; y--){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    y = emptyBlock_y;
+    // RIGHT
+    x++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    x++;
+    for (; x<=8; x++){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    x = emptyBlock_x;
+    // LEFT
+    x--;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    x--;
+    for (; x>=1; x--){
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "kale"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    x = emptyBlock_x;
+    // FORWARD, RIGHT
+    x++;
+    y++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    x++;
+    y++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    while (x != 9 and y != 9) {
+        x++;
+        y++;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    // FORWARD, LEFT
+    x--;
+    y++;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor == game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    while (x != 0 and y != 9) {
+        x--;
+        y++;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor == game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    // DOWNWARD, RIGHT
+    x++;
+    y--;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor != game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    while (x != 9 and y != 0) {
+        x++;
+        y--;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    // DOWNWARD, LEFT
+    x--;
+    y--;
+    if (checkXY(x, y) and game->getBlock(x,y)->getPiece()){
+        if (game->getBlock(x,y)->getPiece()->name == "piyon"
+            and kingColor != game->getBlock(x,y)->getPiece()->getColor()){
+            return true;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+    while (x != 0 and y != 0) {
+        x--;
+        y--;
+        if (checkXY(x, y) and game->getBlock(x,y)->getPiece()) {
+            if (game->getBlock(x,y)->getPiece()->name == "fil"
+                and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            else if (game->getBlock(x,y)->getPiece()->name == "vezir"
+                     and kingColor != game->getBlock(x,y)->getPiece()->getColor())
+                return true;
+            break;
+        }
+    }
+    x = emptyBlock_x;
+    y = emptyBlock_y;
+
+    int x_move, y_move;
+
+    // 1 FORWARD, 2 RIGHT
+    x_move = 2;
+    y_move = 1;
+
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 1 FORWARD, 2 LEFT
+    x_move = -2;
+    y_move = 1;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 1 DOWNWARD, 2 RIGHT
+    x_move = 2;
+    y_move = -1;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 1 DOWNWARD, 2 LEFT
+    x_move = -2;
+    y_move = -1;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 2 FORWARD, 1 RIGHT
+    x_move = 1;
+    y_move = 2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 2 FORWARD, 1 LEFT
+    x_move = -1;
+    y_move = 2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 2 DOWNWARD, 1 RIGHT
+    x_move = 1;
+    y_move = -2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    // 2 DOWNWARD, 1 LEFT
+    x_move = -1;
+    y_move = -2;
+    if (checkXY(x+x_move, y+y_move) and game->getBlock(x+x_move,y+y_move)->getPiece()) {
+        if (game->getBlock(x+x_move,y+y_move)->getPiece()->name == "at"
+            and kingColor != game->getBlock(x+x_move,y+y_move)->getPiece()->getColor())
+            return true;
+    }
+    return false;
+}
+bool isCheckmate(King* king, Game* game) {
+    if(isEscapable(king, game)) return true;
+    std::vector<int> attackerCoord = *(game->getAttacker());
+    if(game->getBlock(attackerCoord)->getPiece()->name != "at"){
+        auto kingCoord(king->getBlock()->getCoordinates());
+        auto kingColor = king->getColor();
+        // Finding out what direction the path between the king and the attacker has
+        // Crosswise direction (BISHOP MOVEMENT):
+        std::vector<int> current (kingCoord);
+        std::vector<int> target (attackerCoord);
+        if (abs(kingCoord[0] - attackerCoord[0]) == abs(kingCoord[1] - attackerCoord[1])){
+            int x = current[0], y = current[1];
+            // FORWARD, RIGHT
+            if (current[0] < target[0] and current[1] < target[1]) {
+                x++;
+                y++;
+                while (x != target[0] and y != target[1]){
+                    if (isBlockBlockable(x, y, kingColor, game)) return true;
+                    x++;
+                    y++;
+                }
+            }
+                // DOWNWARD, RIGHT
+            else if (current[0] < target[0] and current[1] > target[1]) {
+                x++;
+                y--;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
+                    x++;
+                    y--;
+                }
+            }
+                // FORWARD, LEFT
+            else if (current[0] > target[0] and current[1] < target[1]) {
+                x--;
+                y++;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
+                    x--;
+                    y++;
+                }
+            }
+                // DOWNWARD, LEFT
+            else if (current[0] > target[0] and current[1] > target[1]) {
+                x--;
+                y--;
+                while (x != target[0] and y != target[1]){
+                    if (checkXY(x, y) and game->getBlock(x, y)->getPiece()) return true;
+                    x--;
+                    y--;
+                }
+            }
+        }
+
+    // Straight direction (ROOK MOVEMENT):
+        else if ((kingCoord[0] == attackerCoord[0]) or (kingCoord[1] == attackerCoord[1])){
+
+        }
+
+    }
+
+
+
     return false;
 }

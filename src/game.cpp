@@ -13,12 +13,13 @@
 #include "game.h"
 #include "block.h"
 #include "pieces.h"
+#include "utils.h"
 
-Game::Game(QWidget* centralwidget) {
+Game::Game(QWidget* centralWidget) {
     int i,j;
     for(i = 0; i < 8; i++){
         for(j = 0; j < 8; j++){
-            this->board[8*i+j] = new Block(centralwidget, this, j+1, 8-i);
+            this->board[8*i+j] = new Block(centralWidget, this, j + 1, 8 - i);
         }
     }
     for(i = 1; i < 9; i++){
@@ -69,6 +70,7 @@ Game::Game(QWidget* centralwidget) {
     }
     this->chosen = nullptr;
     this->turn = "w";
+    this->attackerCoord = new std::vector<int>(2);
     this->update();
 }
 
@@ -103,6 +105,12 @@ void Game::press(Block *pressed) {
                 std::cout << "error " << code << "\n";
             }
         }
+        this->updateCheck();
+        if(this->isCheck){
+            if(isCheckmate(getKing(this->turn), this)){
+                std::cout << "Checkmate !!!\n" << "Game Over\n";
+            }
+        }
     }
 
     this->update();
@@ -116,7 +124,16 @@ Block* Game::getBlock(int x, int y){
         return nullptr;
 }
 
-King* Game::getKing(std::string color){
+Block* Game::getBlock(const std::vector<int>& coord){
+    if(!coord.empty()){
+        int x = coord[0], y = coord[1];
+        if(x >= 1 and y >= 1 and x < 9 and y < 9)
+            return board[63-8*y+x];
+    }
+    return nullptr;
+}
+
+King* Game::getKing(const std::string& color){
     if(color == "w"){
         return this->wKing;
     }
@@ -142,3 +159,20 @@ void Game::update(){
         this->board[i]->update();
     }
 }
+
+void Game::updateCheck(){
+    *(this->attackerCoord) = isCheck_Game(this->turn, this);
+    if(!this->attackerCoord->empty()){
+        this->isCheck = true;
+    }
+    else this->isCheck = false;
+}
+
+bool Game::getCheck() const{
+    return this->isCheck;
+}
+
+std::vector<int>* Game::getAttacker() const{
+    return this->attackerCoord;
+}
+
