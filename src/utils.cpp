@@ -7,14 +7,14 @@
 #define KING 4
 #define PAWN 5
 
-bool checkXY(int x, int y){
+static bool checkXY(int x, int y){
     if(x >= 1 and y >= 1 and x < 9 and y < 9)
         return true;
     return false;
 }
 
 // It is for examining the check situation after movement.
-Piece* tempGetPiece(int x, int y, std::vector<int>current, std::vector<int>target, Piece* currentPiece, Game* game){
+static Piece* tempGetPiece(int x, int y, std::vector<int>current, std::vector<int>target, Piece* currentPiece, Game* game){
     if(x == current[0] and y == current[1]){
         return nullptr;
     }
