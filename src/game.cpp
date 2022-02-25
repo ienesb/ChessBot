@@ -100,19 +100,20 @@ void Game::press(Block *pressed) {
                 this->performMovement(chosen->getPiece(), pressed);
                 chosen->isClicked = false;
                 chosen = nullptr;
+
+                this->updateCheck();
+                if(this->isCheck){
+                    std::cout << "CHECK " << this->turn << "\n";
+                    if(isCheckmate(getKing(this->turn), this)){
+                        std::cout << "Checkmate !!!\n" << "Game Over\n";
+                    }
+                }
             }
             else{
                 std::cout << "error " << code << "\n";
             }
         }
-        this->updateCheck();
-        if(this->isCheck){
-            if(isCheckmate(getKing(this->turn), this)){
-                std::cout << "Checkmate !!!\n" << "Game Over\n";
-            }
-        }
     }
-
     this->update();
 
 }

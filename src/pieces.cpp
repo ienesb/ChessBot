@@ -23,30 +23,6 @@ bulundugu kareye mi gitmeye calisiyor? -> -5
 #define KING 4
 #define PAWN 5
 
-int Knight::checkMove(Block* target){
-    return checkMove_all(this, target, KNIGHT);
-}
-
-int Bishop::checkMove(Block* target){
-    return checkMove_all(this, target, BISHOP);
-}
-
-int Rook::checkMove(Block* target){
-    return checkMove_all(this, target, ROOK);
-}
-
-int Queen::checkMove(Block* target){
-    return checkMove_all(this, target, QUEEN);
-}
-
-int King::checkMove(Block* target){
-    return checkMove_all(this, target, KING);
-}
-
-int Pawn::checkMove(Block* target){
-    return checkMove_all(this, target, PAWN);
-}
-
 Piece::Piece(std::string color, Block* block, Game* game) {
     this->color = color;
     this->block = block;
@@ -66,7 +42,7 @@ std::string Piece::getColor() {
 }
 
 int Piece::checkMove(Block *target) {
-    return 0;
+    return checkMove_all(this, target);
 }
 
 Game *Piece::getGame() {
