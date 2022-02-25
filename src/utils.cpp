@@ -62,7 +62,7 @@ static bool isValid(std::vector<int>current, std::vector<int>target, const int p
                               game->getBlock(target[0], target[1])->getPiece()->getColor())) return true;
                 else return false;
             }
-                // BLACK PAWN
+            // BLACK PAWN
             else if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "b"){
                 if ((current[0] == target[0]) and (target[1] - current[1] == -1)
                     and game->getBlock(target[0], target[1])->getPiece() == nullptr) return true;
@@ -75,6 +75,8 @@ static bool isValid(std::vector<int>current, std::vector<int>target, const int p
                               game->getBlock(target[0], target[1])->getPiece()->getColor())) return true;
                 else return false;
             }
+        default:
+            return false;
     }
 }
 
@@ -233,6 +235,8 @@ static bool isBlocked(std::vector<int>current, std::vector<int>target, const int
             else if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "b")
                 if (((current[0] == target[0]) and (target[1] - current[1] == -2)) and current[1] == 7)
                     if(game->getBlock(current[0], current[1]-1)->getPiece()) return true;
+            return false;
+        default:
             return false;
     }
 }
