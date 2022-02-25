@@ -11,14 +11,27 @@
 #include "pieces.h"
 #include "ui.h"
 #include "game.h"
+#include "mainUi.h"
+#include "main.h"
+
+void startMenu(QMainWindow* mainWindow, QApplication* app){
+    Window ui;
+    ui.setupUi(mainWindow, app);
+    mainWindow->show();
+}
+
+void startGame(QMainWindow* mainWindow, QApplication* app){
+    GameUi ui;
+    ui.setupUi(mainWindow);
+    mainWindow->show();
+}
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     QMainWindow mainWindow;
-    GameUi ui;
-    ui.setupUi(&mainWindow);
 
-    mainWindow.show();
+    startMenu(&mainWindow, &app);
+    
     return app.exec();
 }
