@@ -1400,6 +1400,27 @@ std::vector<int> isCheck_Game(const std::string& kingColor, Game *game){
 }
 
 bool isCheckmate(King* king, Game* game) {
+    /*
+    isCheckmate():
+    In case of the attacker is a queen, bishop, rook, or pawn:
+    1. Find the possible escape blocks for the King.
+        a) For every direction with radius 1, check whether the king is blocked by its own pieces.
+        b) Count those with the pieces not colored in the King's color as escapable block.
+        c) If there is an escapable block: return false;
+        d) If not: continue;
+    2. Find and locate the attacker using getAttacker() method in Game class.
+
+    // In case of the attacker is a knight, skip the 3rd step.
+    3. Check whether the path between the king and the attacker can be blocked.
+        a) For every empty blocks between the king and the attacker,
+        check in every direction whether there is a suitable piece that can block the path.
+        b) If yes: return false;
+        c) If not: continue;
+    4. Check if the attacker can be eaten by a player's piece.
+        a) Likewise in isCheck(), check in every direction if the attacker can be eaten by an appropriate piece.
+        b) If yes: return false;
+        c) If not: return true;
+     */
     if(isEscapable(king, game)) return false;
     if(isBlockable(king, game)) return false;
     if(isAttackerEatable(game)) return false;
