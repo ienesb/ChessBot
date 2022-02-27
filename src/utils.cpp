@@ -587,7 +587,7 @@ static bool isBlockBlockable(int emptyBlock_x, int emptyBlock_y, King* king, Gam
     else if (checkXY(x, y+1) and game->getBlock(x,y+1)->getPiece()){
         if (kingColor == "b" and game->getBlock(x,y+1)->getPiece()->name == "piyon"
             and kingColor == game->getBlock(x,y+1)->getPiece()->getColor() and y+1 == 7
-            and !checkMove_all(game->getBlock(x,y)->getPiece(), emptyBlock_x, emptyBlock_y)){
+            and !checkMove_all(game->getBlock(x,y+1)->getPiece(), emptyBlock_x, emptyBlock_y)){
             return true;
         }
     }
@@ -621,7 +621,7 @@ static bool isBlockBlockable(int emptyBlock_x, int emptyBlock_y, King* king, Gam
     else if (checkXY(x, y-1) and game->getBlock(x,y-1)->getPiece()){
         if (kingColor == "w" and game->getBlock(x,y-1)->getPiece()->name == "piyon"
             and kingColor == game->getBlock(x,y-1)->getPiece()->getColor() and y-1 == 2
-            and !checkMove_all(game->getBlock(x,y)->getPiece(), emptyBlock_x, emptyBlock_y)){
+            and !checkMove_all(game->getBlock(x,y-1)->getPiece(), emptyBlock_x, emptyBlock_y)){
             return true;
         }
     }
