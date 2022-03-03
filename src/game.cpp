@@ -165,7 +165,23 @@ void Game::performMovement(Piece* piece, Block* target){
 
     piece->getBlock()->setPiece(nullptr);
     piece->setBlock(target);
-    target->setPiece(piece);
+    if (piece->name == "piyon"){
+        auto targetCoord = target->getCoordinates();
+        if (piece->getColor() == "w" and targetCoord[1] == 8) {
+            auto que = new Queen("w", this->getBlock(targetCoord[0], targetCoord[1]), this);
+            target->setPiece(que);
+        }
+        else if (piece->getColor() == "b" and targetCoord[1] == 1) {
+            auto que = new Queen("b", this->getBlock(targetCoord[0], targetCoord[1]), this);
+            target->setPiece(que);
+        }
+        else {
+            target->setPiece(piece);
+        }
+    }
+    else {
+        target->setPiece(piece);
+    }
     if(this->turn == "w"){
         this->turn = "b";
     }
