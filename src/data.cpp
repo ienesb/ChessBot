@@ -36,7 +36,7 @@ void performMovement(Game* game, std::string side, std::string pieceName, int ta
         for(int x: {3,7}){
             targetBlock = game->getBlock(x, targetY);
             int code = king->checkMove(targetBlock);
-            if(code == 0){
+            if(code == 1){
                 game->performCastling(king, targetBlock);
                 return;
             }
