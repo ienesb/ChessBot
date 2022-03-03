@@ -24,8 +24,9 @@ void performMovement(Game* game, std::string side, std::string pieceName, int ta
     Block* targetBlock;
     Piece* piece;
     if(targetX == 0 && targetY == 0){
-        piece = game->getKing(side);
-        block = piece->getBlock();
+        King* king;
+        king = game->getKing(side);
+        block = king->getBlock();
         if(side == "w"){
             targetY = 1;
         }
@@ -34,8 +35,9 @@ void performMovement(Game* game, std::string side, std::string pieceName, int ta
         }
         for(int x: {3,7}){
             targetBlock = game->getBlock(x, targetY);
-            if(piece->checkMove(targetBlock) == 0){
-                game->performMovement(piece, targetBlock);
+            int code = king->checkMove(targetBlock);
+            if(code == 0){
+                game->performCastling(king, targetBlock);
                 return;
             }
         }
