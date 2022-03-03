@@ -19,11 +19,6 @@
  
 using std::filesystem::directory_iterator;
 
-static void counter(){
-    static int x = 0;
-    std::cout << x << "\n";
-    x++;
-}
 void performMovement(Game* game, std::string side, std::string pieceName, int targetX, int targetY){
     Block* block;
     Block* targetBlock;
@@ -42,7 +37,6 @@ void performMovement(Game* game, std::string side, std::string pieceName, int ta
             targetBlock = game->getBlock(x, targetY);
             int code = king->checkMove(targetBlock);
             if(code == 1){
-                counter();
                 game->performCastling(king, targetBlock);
                 return;
             }
