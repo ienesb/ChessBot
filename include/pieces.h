@@ -39,6 +39,7 @@ class Bishop: public Piece{
 
 class Rook: public Piece{
     public:
+    bool isMoved;
     Rook(std::string color, Block* block, Game* game);
 };
 
@@ -49,6 +50,7 @@ class Queen: public Piece{
 
 class King: public Piece{
     public:
+    bool isMoved;
     King(std::string color, Block* block, Game* game);
 };
 

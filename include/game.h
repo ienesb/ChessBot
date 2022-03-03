@@ -27,6 +27,17 @@ private:
     std::string turn;
     bool isCheck;
     std::vector<int>* attackerCoord;
+
+    bool wCastlingLeft;
+    bool wCastlingRight;
+    bool bCastlingLeft;
+    bool bCastlingRight;
+    const std::vector<std::vector<int>> wCastlingLeftCoords = {{2,1},{3,1},{4,1}};
+    const std::vector<std::vector<int>> bCastlingLeftCoords = {{2,8},{3,8},{4,8}};
+    const std::vector<std::vector<int>> wCastlingRightCoords = {{6,1},{7,1}};
+    const std::vector<std::vector<int>> bCastlingRightCoords = {{6,8},{7,8}};
+    void updateCastling(Piece* piece, Block* target);
+
     
 public:
     Block* board[64]{};
@@ -41,6 +52,7 @@ public:
     void updateCheck();
     bool getCheck() const;
     std::vector<int>* getAttacker() const;
+    std::vector<bool> getCastling() const;
     
 };
 #endif

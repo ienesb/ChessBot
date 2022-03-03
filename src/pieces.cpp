@@ -6,9 +6,6 @@ yaptigi hamle kendini mat ediyor mu? -> -4
 bulundugu kareye mi gitmeye calisiyor? -> -5
 */
 
-// TODO:
-//  consider castling in the future
-
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include "game.h"
@@ -65,6 +62,7 @@ Rook::Rook(std::string color, Block* block, Game* game):Piece::Piece(color, bloc
     this->path = "../pngs/pieces/kale.png";
     this->name = "kale";
     this->image = cv::imread("../pngs/pieces/kale.png", 1);
+    this->isMoved = false;
 }
 
 Queen::Queen(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
@@ -77,7 +75,7 @@ King::King(std::string color, Block* block, Game* game):Piece::Piece(color, bloc
     this->path = "../pngs/pieces/sah.png";
     this->name = "sah";
     this->image = cv::imread("../pngs/pieces/sah.png", 1);
-
+    this->isMoved = false;
 }
 
 Pawn::Pawn(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){

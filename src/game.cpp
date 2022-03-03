@@ -71,6 +71,10 @@ Game::Game(QWidget* centralWidget) {
     this->chosen = nullptr;
     this->turn = "w";
     this->attackerCoord = new std::vector<int>(2);
+    this->wCastlingLeft = true;
+    this->wCastlingRight = true;
+    this->bCastlingLeft = true;
+    this->bCastlingRight = true;
     this->update();
 }
 
@@ -142,6 +146,8 @@ King* Game::getKing(const std::string& color){
 }
 
 void Game::performMovement(Piece* piece, Block* target){
+    this->updateCastling(piece, target);
+
     piece->getBlock()->setPiece(nullptr);
     piece->setBlock(target);
     target->setPiece(piece);
@@ -175,5 +181,37 @@ bool Game::getCheck() const{
 
 std::vector<int>* Game::getAttacker() const{
     return this->attackerCoord;
+}
+
+void Game::updateCastling(Piece* piece, Block* target) {
+    static bool neverEntered = true;
+    if(piece->name == "kale" and neverEntered){
+        Rook* rook = static_cast<Rook*>(piece);
+        rook->isMoved = true;
+        neverEntered = false;
+    }
+    else if(piece->name == "sah" and neverEntered){
+        King* king = static_cast<King*>(piece);
+        king->isMoved = true;
+        neverEntered = false;
+    }
+
+    if(this->turn == "w"){
+        if(isIn(target->getCoordinates(), this->bCastlingLeftCoords))
+            this->bCastlingLeft = false;
+        else if(isIn(target->getCoordinates(), this->bCastlingRightCoords))
+            this->bCastlingRight = false;
+    }
+    else{
+        if(isIn(target->getCoordinates(), this->wCastlingLeftCoords))
+            this->wCastlingLeft = false;
+        else if(isIn(target->getCoordinates(), this->wCastlingRightCoords))
+            this->wCastlingRight = false;
+    }
+}
+
+std::vector<bool> Game::getCastling() const{
+    return std::vector<bool>{this->wCastlingLeft, this->wCastlingRight,
+                             this->bCastlingLeft, this->bCastlingRight};
 }
 

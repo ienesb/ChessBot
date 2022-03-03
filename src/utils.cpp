@@ -1426,3 +1426,55 @@ bool isCheckmate(King* king, Game* game) {
     if(isAttackerEatable(game)) return false;
     return true;
 }
+
+bool checkCastling(King* king, Rook* rook, Game* game) {
+    std::string turn = king->getColor();
+    if (!king->isMoved and !rook->isMoved and !game->getCheck()) {
+        auto kingCoord = king->getBlock()->getCoordinates();
+        auto rookCoord = rook->getBlock()->getCoordinates();
+        /*
+         * wCastlingLeft = game->getCastling()[0]
+         * wCastlingRight = game->getCastling()[1]
+         * bCastlingLeft = game->getCastling()[2]
+         * bCastlingRight = game->getCastling()[3]
+         */
+        if (turn == "w") {
+            // RIGHT
+            if (kingCoord[0] < rookCoord[0] and game->getCastling()[1]) {
+                for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
+                }
+            }
+            // LEFT
+            else if (kingCoord[0] > rookCoord[0] and game->getCastling()[0]) {
+                for (int i = kingCoord[0] - 1; i > rookCoord[0]; i--) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
+                }
+            }
+        }
+        // BLACK
+        else {
+            // RIGHT
+            if (kingCoord[0] < rookCoord[0] and game->getCastling()[3]) {
+                for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
+                }
+            }
+            // LEFT
+            else if (kingCoord[0] > rookCoord[0] and game->getCastling()[2]) {
+                for (int i = kingCoord[0] - 1; i > rookCoord[0]; i--) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
+                }
+            }
+        }
+        return true;
+    }
+    else return false;
+}
+
+bool isIn(const std::vector<int>& x, const std::vector<std::vector<int>>& v){
+    for(std::vector<int> i: v){
+        if(i == x) return true;
+    }
+    return false;
+}
