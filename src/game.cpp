@@ -199,12 +199,12 @@ void Game::performCastling(King* king, Block* target) {
     auto targetCoord = target->getCoordinates();
     if (castlingRook->getBlock()->getCoordinates()[0] < targetCoord[0]){
        castlingRook->getBlock()->setPiece(nullptr);
-       castlingRook->setBlock(this->getBlock(targetCoord[0], targetCoord[1]-1));
+       castlingRook->setBlock(this->getBlock(targetCoord[0]+1, targetCoord[1]));
        this->getBlock(targetCoord[0]+1, targetCoord[1])->setPiece(castlingRook);
     }
     else {
         castlingRook->getBlock()->setPiece(nullptr);
-        castlingRook->setBlock(this->getBlock(targetCoord[0], targetCoord[1]+1));
+        castlingRook->setBlock(this->getBlock(targetCoord[0]-1, targetCoord[1]));
         this->getBlock(targetCoord[0]-1, targetCoord[1])->setPiece(castlingRook);
     }
 
