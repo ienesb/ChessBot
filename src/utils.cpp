@@ -46,9 +46,16 @@ static bool isValid(std::vector<int>current, std::vector<int>target, const int p
             if (abs(current[0] - target[0]) == 1 and abs(current[1] - target[1]) == 1) return true;
             else if ((current[0] == target[0] or current[1] == target[1]) and
                      (abs(current[0]-target[0]+current[1]-target[1]) == 1)) return true;
-            else if (abs(current[0] - target[0]) == 2 and current[1] == target[1]
-                and !static_cast<King *>(game->getBlock(current[0], current[1])->getPiece())->isMoved)
-                    return true;
+            else if (abs(current[0] - target[0]) == 2 and current[1] == target[1]){
+                if (current[1] == 1 and game->getBlock(current)->getPiece()->getColor() == "w"){
+                    if(!static_cast<King *>(game->getBlock(current[0], current[1])->getPiece())->isMoved)
+                        return true;
+                }
+                else if (current[1] == 8 and game->getBlock(current)->getPiece()->getColor() == "b"){
+                    if(!static_cast<King *>(game->getBlock(current[0], current[1])->getPiece())->isMoved)
+                        return true;
+                }
+            }
             else return false;
         case PAWN:
             // WHITE PAWN
@@ -1191,7 +1198,7 @@ static std::vector<int> checkCastling(King* king, Block* target, Game* game) {
     }
     else {
         // LEFT
-        if (kingCoord[0] - targetCoord[0] == 2 and game->getCastling()[0]) {
+        if (kingCoord[0] - targetCoord[0] == 2 and game->getCastling()[2]) {
             if (game->getBlock(1, 8)->getPiece()) {
                 Rook *rook = static_cast<Rook *>(game->getBlock(1, 8)->getPiece());
                 auto rookCoord = rook->getBlock()->getCoordinates();
@@ -1205,7 +1212,7 @@ static std::vector<int> checkCastling(King* king, Block* target, Game* game) {
             }
         }
             // RIGHT
-        else if (kingCoord[0] - targetCoord[0] == -2 and game->getCastling()[1]) {
+        else if (kingCoord[0] - targetCoord[0] == -2 and game->getCastling()[3]) {
             if (game->getBlock(8, 8)->getPiece()) {
                 Rook *rook = static_cast<Rook *>(game->getBlock(8, 8)->getPiece());
                 auto rookCoord = rook->getBlock()->getCoordinates();
