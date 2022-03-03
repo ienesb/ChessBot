@@ -11,3 +11,7 @@ cmake ..
 make 
 ./chess
 ```
+
+## Train model with custom dataset
+Place your game{i}.txt files in the folder ai/games/
+# never try to push dataset to remote!!!

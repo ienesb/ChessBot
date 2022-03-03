@@ -160,5 +160,6 @@ qt
 calc
 
 cmake*
-ai/*
-ai/games/*
+
+ai/games
+ai/*.pgn
