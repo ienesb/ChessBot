@@ -19,10 +19,17 @@
  
 using std::filesystem::directory_iterator;
 
-void performMovement(Game* game, std::string side, std::string pieceName, int targetX, int targetY){
+bool isNumber(const std::string& s){
+    return !s.empty() && std::find_if(s.begin(), 
+        s.end(), [](unsigned char c) { return !std::isdigit(c); }) == s.end();
+}
+
+void performMovement(Game* game, std::string side, std::string pieceName, int targetX, int targetY, std::string location){
     Block* block;
     Block* targetBlock;
     Piece* piece;
+    int x,y;
+    std::map<std::string, int> xMap = {{"a",1}, {"b",2}, {"c",3}, {"d",4}, {"e",5}, {"f",6}, {"g",7}, {"h",8}};
     if(targetX == 0 && targetY == 0){
         King* king;
         king = game->getKing(side);
@@ -43,8 +50,22 @@ void performMovement(Game* game, std::string side, std::string pieceName, int ta
         }
     }
     targetBlock = game->getBlock(targetX, targetY);
-    for(int x = 1; x <= 8; x++){
-        for(int y = 1; y <= 8; y++){
+    if(location == "0"){
+        for(x = 1; x <= 8; x++){
+            for(y = 1; y <= 8; y++){
+
+                block = game->getBlock(x, y); 
+                piece = block->getPiece();
+                if(piece != nullptr && piece->getColor() == side && piece->name == pieceName && piece->checkMove(targetBlock) == 0){
+                    game->performMovement(piece, targetBlock);
+                    return;
+                }
+            }
+        }
+    }
+    else if (isNumber(location)){
+        y = std::stoi(location);
+        for(x = 1; x <= 8; x++){
             block = game->getBlock(x, y); 
             piece = block->getPiece();
             if(piece != nullptr && piece->getColor() == side && piece->name == pieceName && piece->checkMove(targetBlock) == 0){
@@ -53,9 +74,18 @@ void performMovement(Game* game, std::string side, std::string pieceName, int ta
             }
         }
     }
-}
-
-void parseNotation(std::string n){    
+    else {
+        x = xMap[location];
+        for(y = 1; y <= 8; y++){
+            block = game->getBlock(x, y); 
+            piece = block->getPiece();
+            if(piece != nullptr && piece->getColor() == side && piece->name == pieceName && piece->checkMove(targetBlock) == 0){
+                game->performMovement(piece, targetBlock);
+                return;
+            }
+        }
+    }
+    
 }
 
 void getBinaryBoard(Game* game, char* c){
@@ -182,7 +212,7 @@ int main(int argc, char *argv[]){
             else{
                 turn = "b";
             }
-            performMovement(ui.game, turn, pieceName, targetX, targetY);
+            performMovement(ui.game, turn, pieceName, targetX, targetY, data[3]);
             getBinaryBoard(ui.game, c);
             inputData.assign(c, 12*64);
             outputData = data[4];
