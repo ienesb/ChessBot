@@ -168,12 +168,12 @@ void Game::performMovement(Piece* piece, Block* target){
     if (piece->name == "piyon"){
         auto targetCoord = target->getCoordinates();
         if (piece->getColor() == "w" and targetCoord[1] == 8) {
-            auto que = new Queen("w", this->getBlock(targetCoord[0], targetCoord[1]), this);
-            target->setPiece(que);
+            auto queen = new Queen("w", this->getBlock(targetCoord[0], targetCoord[1]), this);
+            target->setPiece(queen);
         }
         else if (piece->getColor() == "b" and targetCoord[1] == 1) {
-            auto que = new Queen("b", this->getBlock(targetCoord[0], targetCoord[1]), this);
-            target->setPiece(que);
+            auto queen = new Queen("b", this->getBlock(targetCoord[0], targetCoord[1]), this);
+            target->setPiece(queen);
         }
         else {
             target->setPiece(piece);
