@@ -20,7 +20,7 @@ class Block;
 
 class Game{
 private:
-    int numberOfPlayer{};
+    // int numberOfPlayer{};
     King* wKing;
     King* bKing;
     Rook* castlingRook;
