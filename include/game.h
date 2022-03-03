@@ -23,6 +23,7 @@ private:
     int numberOfPlayer{};
     King* wKing;
     King* bKing;
+    Rook* castlingRook;
     Block* chosen;
     std::string turn;
     bool isCheck;
@@ -46,7 +47,9 @@ public:
     Block* getBlock(int x, int y);
     Block* getBlock(const std::vector<int>& coord);
     King* getKing(const std::string& color);
+    void setCastlingRook(Rook* rook);
     void performMovement(Piece* piece, Block* target);
+    void performCastling(King* king, Block* target);
     void update();
 
     void updateCheck();

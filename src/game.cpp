@@ -68,6 +68,7 @@ Game::Game(QWidget* centralWidget) {
             }
         }
     }
+    this->castlingRook = nullptr;
     this->chosen = nullptr;
     this->turn = "w";
     this->attackerCoord = new std::vector<int>(2);
@@ -113,7 +114,21 @@ void Game::press(Block *pressed) {
                     }
                 }
             }
-            else{
+            else if (code == 1){
+                std::cout << "success castling\n";
+                this->performCastling(static_cast<King *>(chosen->getPiece()), pressed);
+                chosen->isClicked = false;
+                chosen = nullptr;
+
+                this->updateCheck();
+                if(this->isCheck){
+                    std::cout << "CHECK " << this->turn << "\n";
+                    if(isCheckmate(getKing(this->turn), this)){
+                        std::cout << "Checkmate !!!\n" << "Game Over\n";
+                    }
+                }
+            }
+            else {
                 std::cout << "error " << code << "\n";
             }
         }
@@ -151,6 +166,32 @@ void Game::performMovement(Piece* piece, Block* target){
     piece->getBlock()->setPiece(nullptr);
     piece->setBlock(target);
     target->setPiece(piece);
+    if(this->turn == "w"){
+        this->turn = "b";
+    }
+    else{
+        this->turn = "w";
+    }
+    this->update();
+}
+
+void Game::performCastling(King* king, Block* target) {
+    this->updateCastling(king, target);
+    king->getBlock()->setPiece(nullptr);
+    king->setBlock(target);
+    target->setPiece(king);
+    auto targetCoord = target->getCoordinates();
+    if (castlingRook->getBlock()->getCoordinates()[0] < targetCoord[0]){
+       castlingRook->getBlock()->setPiece(nullptr);
+       castlingRook->setBlock(this->getBlock(targetCoord[0], targetCoord[1]-1));
+       this->getBlock(targetCoord[0]+1, targetCoord[1])->setPiece(castlingRook);
+    }
+    else {
+        castlingRook->getBlock()->setPiece(nullptr);
+        castlingRook->setBlock(this->getBlock(targetCoord[0], targetCoord[1]+1));
+        this->getBlock(targetCoord[0]-1, targetCoord[1])->setPiece(castlingRook);
+    }
+
     if(this->turn == "w"){
         this->turn = "b";
     }
@@ -215,3 +256,6 @@ std::vector<bool> Game::getCastling() const{
                              this->bCastlingLeft, this->bCastlingRight};
 }
 
+void Game::setCastlingRook(Rook* rook) {
+    this->castlingRook = rook;
+}

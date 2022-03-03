@@ -46,6 +46,9 @@ static bool isValid(std::vector<int>current, std::vector<int>target, const int p
             if (abs(current[0] - target[0]) == 1 and abs(current[1] - target[1]) == 1) return true;
             else if ((current[0] == target[0] or current[1] == target[1]) and
                      (abs(current[0]-target[0]+current[1]-target[1]) == 1)) return true;
+            else if (abs(current[0] - target[0]) == 2 and current[1] == target[1]
+                and !static_cast<King *>(game->getBlock(current[0], current[1])->getPiece())->isMoved)
+                    return true;
             else return false;
         case PAWN:
             // WHITE PAWN
@@ -490,7 +493,8 @@ static bool isCheck(std::vector<int>current, std::vector<int>target, Game *game)
 }
 
 static int checkMove_all(Piece* piece, int x, int y){
-    std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2}, {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
+    std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2},
+                                          {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
     const int identifier = pieceMap[piece->name];
     // getting coordinates
     auto currentCoord(piece->getBlock()->getCoordinates());
@@ -1145,6 +1149,71 @@ static bool isAttackerEatable(Game* game){
     return false;
 }
 
+static std::vector<int> checkCastling(King* king, Block* target, Game* game) {
+    std::string turn = king->getColor();
+    auto kingCoord = king->getBlock()->getCoordinates();
+    auto targetCoord = target->getCoordinates();
+    /*
+     * wCastlingLeft = game->getCastling()[0]
+     * wCastlingRight = game->getCastling()[1]
+     * bCastlingLeft = game->getCastling()[2]
+     * bCastlingRight = game->getCastling()[3]
+     */
+    if (turn == "w") {
+        // LEFT
+        if (kingCoord[0] - targetCoord[0] == 2 and game->getCastling()[0]) {
+            Rook *rook = static_cast<Rook *>(game->getBlock(1, 1)->getPiece());
+            auto rookCoord = rook->getBlock()->getCoordinates();
+            if (!king->isMoved and !rook->isMoved
+                and !checkMove_all(king, targetCoord[0], targetCoord[1])) {
+                for (int i = kingCoord[0] - 1; i > rookCoord[0]; i--) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return std::vector<int>{};
+                }
+                return std::vector<int>{1,1};
+            }
+        }
+            // RIGHT
+        else if (kingCoord[0] - targetCoord[0] == -2 and game->getCastling()[1]) {
+            Rook *rook = static_cast<Rook *>(game->getBlock(8, 1)->getPiece());
+            auto rookCoord = rook->getBlock()->getCoordinates();
+            if (!king->isMoved and !rook->isMoved
+                and !checkMove_all(king, targetCoord[0], targetCoord[1])) {
+                for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return std::vector<int>{};
+                }
+                return std::vector<int>{8,1};
+            }
+        }
+    }
+    else {
+        // LEFT
+        if (kingCoord[0] - targetCoord[0] == 2 and game->getCastling()[0]) {
+            Rook *rook = static_cast<Rook *>(game->getBlock(1, 8)->getPiece());
+            auto rookCoord = rook->getBlock()->getCoordinates();
+            if (!king->isMoved and !rook->isMoved
+                and !checkMove_all(king, targetCoord[0], targetCoord[1])) {
+                for (int i = kingCoord[0] - 1; i > rookCoord[0]; i--) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return std::vector<int>{};
+                }
+                return std::vector<int>{1,8};
+            }
+        }
+            // RIGHT
+        else if (kingCoord[0] - targetCoord[0] == -2 and game->getCastling()[1]) {
+            Rook *rook = static_cast<Rook *>(game->getBlock(8, 8)->getPiece());
+            auto rookCoord = rook->getBlock()->getCoordinates();
+            if (!king->isMoved and !rook->isMoved
+                and !checkMove_all(king, targetCoord[0], targetCoord[1])) {
+                for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
+                    if (game->getBlock(i, kingCoord[1])->getPiece()) return std::vector<int>{};
+                }
+                return std::vector<int>{8,8};
+            }
+        }
+    }
+    return std::vector<int>{};
+}
+
 int checkMove_all(Piece* piece, Block* target){
     std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2}, {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
     const int identifier = pieceMap[piece->name];
@@ -1161,6 +1230,16 @@ int checkMove_all(Piece* piece, Block* target){
     if(isBlocked(currentCoord, targetCoord, identifier, piece->getGame())) return -2;
     // checking whether the movement causes check
     if(isCheck(currentCoord, targetCoord, piece->getGame())) return -4;
+    // checking castling
+    if(piece->name == "sah" and abs(currentCoord[0] - targetCoord[0]) == 2){
+        auto rookCoord = checkCastling(static_cast<King *>(piece), target, piece->getGame());
+        if(rookCoord.empty()) return -6;
+        else {
+            auto game = piece->getGame();
+            game->setCastlingRook(static_cast<Rook *>(game->getBlock(rookCoord)->getPiece()));
+            return 1;
+        }
+    }
     return 0;
 }
 
@@ -1425,51 +1504,6 @@ bool isCheckmate(King* king, Game* game) {
     if(isBlockable(king, game)) return false;
     if(isAttackerEatable(game)) return false;
     return true;
-}
-
-bool checkCastling(King* king, Rook* rook, Game* game) {
-    std::string turn = king->getColor();
-    if (!king->isMoved and !rook->isMoved and !game->getCheck()) {
-        auto kingCoord = king->getBlock()->getCoordinates();
-        auto rookCoord = rook->getBlock()->getCoordinates();
-        /*
-         * wCastlingLeft = game->getCastling()[0]
-         * wCastlingRight = game->getCastling()[1]
-         * bCastlingLeft = game->getCastling()[2]
-         * bCastlingRight = game->getCastling()[3]
-         */
-        if (turn == "w") {
-            // RIGHT
-            if (kingCoord[0] < rookCoord[0] and game->getCastling()[1]) {
-                for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
-                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
-                }
-            }
-            // LEFT
-            else if (kingCoord[0] > rookCoord[0] and game->getCastling()[0]) {
-                for (int i = kingCoord[0] - 1; i > rookCoord[0]; i--) {
-                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
-                }
-            }
-        }
-        // BLACK
-        else {
-            // RIGHT
-            if (kingCoord[0] < rookCoord[0] and game->getCastling()[3]) {
-                for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
-                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
-                }
-            }
-            // LEFT
-            else if (kingCoord[0] > rookCoord[0] and game->getCastling()[2]) {
-                for (int i = kingCoord[0] - 1; i > rookCoord[0]; i--) {
-                    if (game->getBlock(i, kingCoord[1])->getPiece()) return false;
-                }
-            }
-        }
-        return true;
-    }
-    else return false;
 }
 
 bool isIn(const std::vector<int>& x, const std::vector<std::vector<int>>& v){
