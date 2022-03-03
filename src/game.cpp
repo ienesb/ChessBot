@@ -216,10 +216,6 @@ void Game::updateCheck(){
     else this->isCheck = false;
 }
 
-bool Game::getCheck() const{
-    return this->isCheck;
-}
-
 std::vector<int>* Game::getAttacker() const{
     return this->attackerCoord;
 }

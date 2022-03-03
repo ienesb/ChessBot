@@ -53,9 +53,7 @@ public:
     void update();
 
     void updateCheck();
-    bool getCheck() const;
     std::vector<int>* getAttacker() const;
     std::vector<bool> getCastling() const;
-    
 };
 #endif
