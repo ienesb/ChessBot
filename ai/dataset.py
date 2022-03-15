@@ -21,8 +21,6 @@ class ChessDataset(Dataset):
                 else:
                     X = np.vstack((X, inputData))
                     Y = np.vstack((Y, outputData))
-                if i == 10:
-                    break
         
         X = X.astype(np.float32)
         Y = Y.astype(np.float32)
