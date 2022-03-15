@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.10)
 
 project(ChessBot)
 
@@ -11,6 +11,8 @@ file(GLOB HEADERS "include/*.h")
 file(GLOB SOURCES "src/*.cpp")
 
 add_executable(chess ${SOURCES} ${HEADERS})
+
+add_compile_options("-lstdc++fs")
 
 target_link_libraries(chess ${OpenCV_LIBS})
 target_link_libraries(chess Qt5::Widgets)

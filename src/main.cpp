@@ -26,12 +26,12 @@ void startGame(QMainWindow* mainWindow, QApplication* app){
     mainWindow->show();
 }
 
-// int main(int argc, char *argv[])
-// {
-//     QApplication app(argc, argv);
-//     QMainWindow mainWindow;
+int main(int argc, char *argv[])
+{
+    QApplication app(argc, argv);
+    QMainWindow mainWindow;
 
-//     startMenu(&mainWindow, &app);
+    startMenu(&mainWindow, &app);
     
-//     return app.exec();
-// }
+    return app.exec();
+}
