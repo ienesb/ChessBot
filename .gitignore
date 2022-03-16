@@ -164,3 +164,4 @@ cmake*
 ai/games
 ai/*.pgn
 ai/data.txt
+ai/*npy
