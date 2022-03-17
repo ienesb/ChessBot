@@ -33,7 +33,6 @@ def train(dataloader, model, loss_fn, optimizer):
     model.train()
     for batch, (x, y) in enumerate(dataloader):
         x, y = x.to(device), y.to(device)
-        print(x.shape)
         pred = model(x)
         loss = loss_fn(pred, y)
 

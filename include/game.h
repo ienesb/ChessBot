@@ -12,11 +12,13 @@
 
 #include "block.h"
 #include "pieces.h"
+#include "player.h"
 
 #define SIZE 100
 
 class Piece;
 class Block;
+class Player;
 
 class Game{
 private:
@@ -28,6 +30,8 @@ private:
     std::string turn;
     bool isCheck;
     std::vector<int>* attackerCoord;
+    Player* whitePlayer;
+    Player* blackPlayer;
 
     bool wCastlingLeft;
     bool wCastlingRight;

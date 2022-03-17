@@ -14,9 +14,12 @@
 #include "block.h"
 #include "pieces.h"
 #include "utils.h"
+#include "player.h"
 
 Game::Game(QWidget* centralWidget) {
     int i,j;
+    this->whitePlayer = new Player("w", this);
+    this->blackPlayer = new Player("b", this);
     for(i = 0; i < 8; i++){
         for(j = 0; j < 8; j++){
             this->board[8*i+j] = new Block(centralWidget, this, j + 1, 8 - i);
@@ -27,6 +30,8 @@ Game::Game(QWidget* centralWidget) {
         Pawn* bPawn = new Pawn("b", this->getBlock(i, 7), this);
         this->getBlock(i, 2)->setPiece(wPawn);
         this->getBlock(i, 7)->setPiece(bPawn);
+        whitePlayer->setPiece(wPawn);
+        blackPlayer->setPiece(bPawn);
         switch(i){
             case 1:
             case 8:{
@@ -34,6 +39,8 @@ Game::Game(QWidget* centralWidget) {
                 Rook* bRook = new Rook("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wRook);
                 this->getBlock(i, 8)->setPiece(bRook);
+                whitePlayer->setPiece(wRook);
+                blackPlayer->setPiece(bRook);
                 break;
             }
             case 2:
@@ -42,6 +49,8 @@ Game::Game(QWidget* centralWidget) {
                 Knight* bKnight = new Knight("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wKnight);
                 this->getBlock(i, 8)->setPiece(bKnight);
+                whitePlayer->setPiece(wKnight);
+                blackPlayer->setPiece(bKnight);
                 break;
             }
             case 3:
@@ -50,6 +59,8 @@ Game::Game(QWidget* centralWidget) {
                 Bishop* bBishop = new Bishop("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wBishop);
                 this->getBlock(i, 8)->setPiece(bBishop);
+                whitePlayer->setPiece(wBishop);
+                blackPlayer->setPiece(bBishop);
                 break;
             }
             case 4:{
@@ -57,6 +68,8 @@ Game::Game(QWidget* centralWidget) {
                 Queen* bQueen = new Queen("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wQueen);
                 this->getBlock(i, 8)->setPiece(bQueen);
+                whitePlayer->setPiece(wQueen);
+                blackPlayer->setPiece(bQueen);
                 break;
             }
             case 5:{
@@ -64,6 +77,8 @@ Game::Game(QWidget* centralWidget) {
                 this->bKing = new King("b", this->getBlock(i, 8), this);
                 this->getBlock(i, 1)->setPiece(wKing);
                 this->getBlock(i, 8)->setPiece(bKing);
+                whitePlayer->setPiece(wKing);
+                blackPlayer->setPiece(bKing);
                 break;
             }
         }

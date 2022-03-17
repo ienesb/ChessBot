@@ -7,7 +7,8 @@ git clone https://github.com/ienesb/ChessBot.git
 cd ChessBot
 mkdir build
 cd build
-cmake ..
+cmake -DCMAKE_PREFIX_PATH=`python -c 'import torch;print(torch.utils.cmake_prefix_path)'` ..
+cmake --build . --config Release
 make 
 ./chess
 ```
