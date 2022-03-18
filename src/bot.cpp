@@ -2,6 +2,7 @@
 
 #include "bot.h"
 #include "model.h"
+#include "move.h"
 
 Bot::Bot(std::string color, Game* game, std::string modelPath):Player::Player(color, game){
 

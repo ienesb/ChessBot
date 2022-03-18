@@ -6,7 +6,7 @@
 
 struct Move{
     Block* target;
-    Piece* piece
+    Piece* piece;
 };
 
 #endif

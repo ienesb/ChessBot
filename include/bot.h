@@ -6,12 +6,13 @@
 
 #include "player.h"
 #include "game.h"
+#include "move.h"
 
 class Bot: public Player{
     private:
     public:
     Bot(std::string color, Game* game, std::string modelPath);
-    std::vector<Move> Bot::listAllMoves();
+    std::vector<Move> listAllMoves();
 };
 
 #endif
