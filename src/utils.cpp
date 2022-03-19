@@ -1530,13 +1530,6 @@ bool isIn(const std::vector<int>& x, const std::vector<std::vector<int>>& v){
 }
 
 std::vector<Move> listMoves(std::vector<Piece*> pieces){
-    /*
-     * Example Output:
-     * std::vector<s_pieceMove>{s_pieceMove{Piece* rook, std::vector<std::vector<int>> moveCoords{{1,1},{2,3},{5,6}},
-     *                          s_pieceMove{Piece* bishop, std::vector<std::vector<int>> moveCoords{{4,1},{4,2},{4,3}},
-     *                          s_pieceMove{Piece* queen, std::vector<std::vector<int>> moveCoords{{7,1},{2,1},{1,6}}
-     *                          }
-     */
     int x, y;
     std::vector<Move> package;
     std::vector<Block*> targets;
@@ -1759,17 +1752,6 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                 if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
                     targets.push_back(game->getBlock(x, y));
                 }
-                // TODO: It is in wait until the castling case is defined.
-                /*
-                // RIGHT CASTLING
-                x = pieceCoord[0] + 2;
-                if(checkCastling(static_cast<King *>(piece), game->getBlock(x, y), game)[0] == 8)
-                    targets.push_back(std::vector<int>{10});
-                // LEFT CASTLING
-                x = pieceCoord[0] - 2;
-                if(checkCastling(static_cast<King *>(piece), game->getBlock(x, y), game)[0] == 1)
-                    targets.push_back(std::vector<int>{9});
-                */
             case PAWN:
                 // WHITE PAWN
                 if (piece->getColor() == "w") {
