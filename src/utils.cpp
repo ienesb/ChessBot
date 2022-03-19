@@ -1530,13 +1530,6 @@ bool isIn(const std::vector<int>& x, const std::vector<std::vector<int>>& v){
 }
 
 std::vector<Move> listMoves(std::vector<Piece*> pieces){
-    /*
-     * Example Output:
-     * std::vector<s_pieceMove>{s_pieceMove{Piece* rook, std::vector<std::vector<int>> moveCoords{{1,1},{2,3},{5,6}},
-     *                          s_pieceMove{Piece* bishop, std::vector<std::vector<int>> moveCoords{{4,1},{4,2},{4,3}},
-     *                          s_pieceMove{Piece* queen, std::vector<std::vector<int>> moveCoords{{7,1},{2,1},{1,6}}
-     *                          }
-     */
     int x, y;
     std::vector<Move> package;
     std::vector<Block*> targets;
