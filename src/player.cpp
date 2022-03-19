@@ -21,3 +21,7 @@ void Player::setPiece(Piece* piece){
 void Player::removePiece(Piece* piece){
     //remove piece from vector pieces if you want
 }
+
+std::vector<Piece *> Player::getPieces() {
+    return this->pieces;
+}

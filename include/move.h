@@ -5,7 +5,7 @@
 #include "block.h"
 
 struct Move{
-    Block* target;
+    std::vector<Block*> targets;
     Piece* piece;
 };
 
