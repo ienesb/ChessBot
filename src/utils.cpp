@@ -1540,7 +1540,6 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
     catch (int error) {
         std::cout << "[ERR: " << error << "] " << "std::vector<Piece*> pieces cannot be empty.\n";
     }
-
     auto game = pieces[0]->getGame();
 
     for(auto& piece : pieces){
