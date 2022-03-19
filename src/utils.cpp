@@ -1534,7 +1534,12 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
     std::vector<Move> package;
     std::vector<Block*> targets;
     Move data;
-
+    try {
+        if (pieces.empty()) throw 500;
+    }
+    catch (int error) {
+        std::cout << "[ERR: " << error << "] " << "std::vector<Piece*> pieces cannot be empty.\n";
+    }
     if(pieces.empty()) return package;
     auto game = pieces[0]->getGame();
 
