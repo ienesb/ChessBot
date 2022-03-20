@@ -118,7 +118,7 @@ void Game::press(Block *pressed) {
 
             if(code == 0){
                 std::cout << "success\n";
-                GameMove move;
+                Move move;
                 move.target = pressed;
                 move.piece = chosen->getPiece();
                 this->performMovement(move);
@@ -179,7 +179,7 @@ King* Game::getKing(const std::string& color){
     return this->bKing;
 }
 
-void Game::performMovement(GameMove move){
+void Game::performMovement(Move move){
     this->updateCastling(move.piece, move.target);
 
     move.piece->getBlock()->setPiece(nullptr);

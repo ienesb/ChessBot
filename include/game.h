@@ -53,7 +53,7 @@ public:
     Block* getBlock(const std::vector<int>& coord);
     King* getKing(const std::string& color);
     void setCastlingRook(Rook* rook);
-    void performMovement(GameMove move);
+    void performMovement(Move move);
     void performCastling(King* king, Block* target);
     void update();
 
