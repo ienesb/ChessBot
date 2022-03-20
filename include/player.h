@@ -19,6 +19,8 @@ class Player{
     void setPiece(Piece* piece);
     void removePiece(Piece* piece);
     std::vector<Piece*> getPieces();
+    void printPieces();
+    void updatePieces();
 };
 
 #endif

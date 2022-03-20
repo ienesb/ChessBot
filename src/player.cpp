@@ -1,5 +1,6 @@
 #include "player.h"
 #include "game.h"
+#include "pieces.h"
 
 Player::Player(std::string color, Game* game){
     this->color = color;
@@ -24,4 +25,20 @@ void Player::removePiece(Piece* piece){
 
 std::vector<Piece *> Player::getPieces() {
     return this->pieces;
+}
+
+void Player::printPieces(){
+    for(Piece* p: pieces){
+        std::cout << p->name << "\n";
+    }
+}
+
+void Player::updatePieces(){
+    std::vector<Piece*>::iterator i = pieces.begin();
+    for(Piece* p: pieces){
+        if(p->name.empty()){
+            pieces.erase(i);
+        }
+        i++; 
+    }
 }

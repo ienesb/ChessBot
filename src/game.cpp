@@ -181,7 +181,11 @@ King* Game::getKing(const std::string& color){
 
 void Game::performMovement(Move move){
     this->updateCastling(move.piece, move.target);
-
+    if(move.target->getPiece() != nullptr){
+        delete move.target->getPiece();
+        blackPlayer->updatePieces();
+        whitePlayer->updatePieces();
+    }
     move.piece->getBlock()->setPiece(nullptr);
     move.piece->setBlock(move.target);
     if (move.piece->name == "piyon"){
