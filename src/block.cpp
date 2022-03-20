@@ -45,6 +45,9 @@ Block::Block(QWidget* widget, Game* game, int x, int y):QLabel::QLabel(widget){
 
 }
 
+Block::~Block(){
+    remove(name.c_str());
+}
 
 void Block::setPiece(Piece* piece){
     this->piece = piece;
