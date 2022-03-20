@@ -76,7 +76,7 @@ static bool isValid(std::vector<int>current, std::vector<int>target, const int p
                 else return false;
             }
             // BLACK PAWN
-            else if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "b"){
+            else {
                 if ((current[0] == target[0]) and (target[1] - current[1] == -1)
                     and game->getBlock(target[0], target[1])->getPiece() == nullptr) return true;
 
