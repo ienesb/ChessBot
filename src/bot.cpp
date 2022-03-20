@@ -3,14 +3,14 @@
 #include "bot.h"
 #include "model.h"
 #include "move.h"
+#include "utils.h"
 
 Bot::Bot(std::string color, Game* game, std::string modelPath):Player::Player(color, game){
     // torch::load(model, modelPath);
 }
 
 std::vector<Move> Bot::listAllMoves(){
-    // type here
-    // use game pointer and pieces vector
+    return listMoves(this->getPieces());
 }
 
 // Move Bot::getBestMove(std::vector<Move> moves){

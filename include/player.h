@@ -18,6 +18,7 @@ class Player{
     Game* getGame();
     void setPiece(Piece* piece);
     void removePiece(Piece* piece);
+    std::vector<Piece*> getPieces();
 };
 
 #endif

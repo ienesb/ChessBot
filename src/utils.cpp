@@ -7,6 +7,9 @@
 #define KING 4
 #define PAWN 5
 
+static std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2},
+                                      {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
+
 static bool checkXY(int x, int y){
     if(x >= 1 and y >= 1 and x < 9 and y < 9)
         return true;
@@ -73,7 +76,7 @@ static bool isValid(std::vector<int>current, std::vector<int>target, const int p
                 else return false;
             }
             // BLACK PAWN
-            else if (game->getBlock(current[0],current[1])->getPiece()->getColor() == "b"){
+            else {
                 if ((current[0] == target[0]) and (target[1] - current[1] == -1)
                     and game->getBlock(target[0], target[1])->getPiece() == nullptr) return true;
 
@@ -500,8 +503,6 @@ static bool isCheck(std::vector<int>current, std::vector<int>target, Game *game)
 }
 
 static int checkMove_all(Piece* piece, int x, int y){
-    std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2},
-                                          {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
     const int identifier = pieceMap[piece->name];
     // getting coordinates
     auto currentCoord(piece->getBlock()->getCoordinates());
@@ -1221,7 +1222,7 @@ static std::vector<int> checkCastling(King* king, Block* target, Game* game) {
                     for (int i = kingCoord[0] + 1; i < rookCoord[0]; i++) {
                         if (game->getBlock(i, kingCoord[1])->getPiece()) return std::vector<int>{};
                     }
-                    return std::vector<int>{8,8};
+                    return std::vector<int>{8, 8};
                     }
             }
         }
@@ -1522,8 +1523,301 @@ bool isCheckmate(King* king, Game* game) {
 }
 
 bool isIn(const std::vector<int>& x, const std::vector<std::vector<int>>& v){
-    for(std::vector<int> i: v){
+    for(auto& i: v){
         if(i == x) return true;
     }
     return false;
 }
+
+std::vector<Move> listMoves(std::vector<Piece*> pieces){
+    int x, y;
+    std::vector<Move> package;
+    std::vector<Block*> targets;
+    Move data;
+    try {
+        if (pieces.empty()) throw 500;
+    }
+    catch (int error) {
+        std::cout << "[ERR: " << error << "] " << "std::vector<Piece*> pieces cannot be empty.\n";
+    }
+    auto game = pieces[0]->getGame();
+
+    for(auto& piece : pieces){
+        auto pieceCoord = piece->getBlock()->getCoordinates();
+        x = pieceCoord[0], y = pieceCoord[1];
+        switch (pieceMap[piece->name]) {
+            case KNIGHT:
+                // 1 FORWARD, 2 RIGHT
+                x = pieceCoord[0] + 2, y = pieceCoord[1] + 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 1 FORWARD, 2 LEFT
+                x = pieceCoord[0] - 2, y = pieceCoord[1] + 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 1 DOWNWARD, 2 RIGHT
+                x = pieceCoord[0] + 2, y = pieceCoord[1] - 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 1 DOWNWARD, 2 LEFT
+                x = pieceCoord[0] - 2, y = pieceCoord[1] - 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 2 FORWARD, 1 RIGHT
+                x = pieceCoord[0] + 1, y = pieceCoord[1] + 2;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 2 FORWARD, 1 LEFT
+                x = pieceCoord[0] - 1, y = pieceCoord[1] + 2;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 2 DOWNWARD, 1 RIGHT
+                x = pieceCoord[0] + 1, y = pieceCoord[1] - 2;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // 2 DOWNWARD, 1 LEFT
+                x = pieceCoord[0] - 1, y = pieceCoord[1] - 2;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0){
+                    targets.push_back(game->getBlock(x, y));
+                }
+            case BISHOP:
+                // FORWARD, RIGHT
+                while (++x != 9 and ++y != 9) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // FORWARD, LEFT
+                while (--x != 0 and ++y != 9) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // DOWNWARD, RIGHT
+                while (++x != 9 and --y != 0) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // DOWNWARD, LEFT
+                while (--x != 0 and --y != 0) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+            case ROOK:
+                // FORWARD
+                while (++y != 9){
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                y = pieceCoord[1];
+                // DOWNWARD
+                while (--y != 0) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                y = pieceCoord[1];
+                // RIGHT
+                while (++x != 9) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0];
+                // LEFT
+                while (--x != 0){
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+            case QUEEN:
+                // FORWARD, RIGHT
+                while (++x != 9 and ++y != 9) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // FORWARD, LEFT
+                while (--x != 0 and ++y != 9) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // DOWNWARD, RIGHT
+                while (++x != 9 and --y != 0) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // DOWNWARD, LEFT
+                while (--x != 0 and --y != 0) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0], y = pieceCoord[1];
+                // FORWARD
+                while (++y != 9){
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                y = pieceCoord[1];
+                // DOWNWARD
+                while (--y != 0) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                y = pieceCoord[1];
+                // RIGHT
+                while (++x != 9) {
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+                x = pieceCoord[0];
+                // LEFT
+                while (--x != 0){
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    else break;
+                }
+            case KING:
+                // FORWARD, RIGHT
+                x = pieceCoord[0] + 1, y = pieceCoord[1] + 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // FORWARD, LEFT
+                x = pieceCoord[0] - 1, y = pieceCoord[1] + 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // DOWNWARD, RIGHT
+                x = pieceCoord[0] + 1, y = pieceCoord[1] - 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // DOWNWARD, LEFT
+                x = pieceCoord[0] - 1, y = pieceCoord[1] - 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // FORWARD
+                x = pieceCoord[0], y = pieceCoord[1] + 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // DOWNWARD
+                y = pieceCoord[1] - 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // RIGHT
+                x = pieceCoord[0] + 1, y = pieceCoord[1];
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // LEFT
+                x = pieceCoord[0] - 1;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                    targets.push_back(game->getBlock(x, y));
+                }
+                // RIGHT CASTLING
+                x = pieceCoord[0] + 2;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 1)
+                    targets.push_back(game->getBlock(x, y));
+                // LEFT CASTLING
+                x = pieceCoord[0] - 2;
+                if(checkMove_all(piece, game->getBlock(x, y)) == 1)
+                    targets.push_back(game->getBlock(x, y));
+            case PAWN:
+                // WHITE PAWN
+                if (piece->getColor() == "w") {
+                    // FORWARD, RIGHT
+                    x = pieceCoord[0] + 1, y = pieceCoord[1] + 1;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    // FORWARD, LEFT
+                    x = pieceCoord[0] - 1, y = pieceCoord[1] + 1;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    // FORWARD
+                    x = pieceCoord[0], y = pieceCoord[1] + 1;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    // FORWARD 2
+                    x = pieceCoord[0], y = pieceCoord[1] + 2;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                }
+                // BLACK PAWN
+                else {
+                    // DOWNWARD, RIGHT
+                    x = pieceCoord[0] + 1, y = pieceCoord[1] - 1;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    // DOWNWARD, LEFT
+                    x = pieceCoord[0] - 1, y = pieceCoord[1] - 1;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    // DOWNWARD
+                    y = pieceCoord[1] - 1;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                    // DOWNWARD 2
+                    y = pieceCoord[1] - 2;
+                    if(checkMove_all(piece, game->getBlock(x, y)) == 0) {
+                        targets.push_back(game->getBlock(x, y));
+                    }
+                }
+        }
+        if (targets.empty()) continue;
+        data.piece = piece;
+        data.targets = targets;
+        package.push_back(data);
+        targets.clear();
+    }
+    return package;
+}
+
