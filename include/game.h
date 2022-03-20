@@ -13,6 +13,7 @@
 #include "block.h"
 #include "pieces.h"
 #include "player.h"
+#include "move.h"
 
 #define SIZE 100
 
@@ -52,7 +53,7 @@ public:
     Block* getBlock(const std::vector<int>& coord);
     King* getKing(const std::string& color);
     void setCastlingRook(Rook* rook);
-    void performMovement(Piece* piece, Block* target);
+    void performMovement(GameMove move);
     void performCastling(King* king, Block* target);
     void update();
 

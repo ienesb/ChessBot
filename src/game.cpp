@@ -15,6 +15,7 @@
 #include "pieces.h"
 #include "utils.h"
 #include "player.h"
+#include "move.h"
 
 Game::Game(QWidget* centralWidget) {
     int i,j;
@@ -117,7 +118,10 @@ void Game::press(Block *pressed) {
 
             if(code == 0){
                 std::cout << "success\n";
-                this->performMovement(chosen->getPiece(), pressed);
+                GameMove move;
+                move.target = pressed;
+                move.piece = chosen->getPiece();
+                this->performMovement(move);
                 chosen->isClicked = false;
                 chosen = nullptr;
 
@@ -175,27 +179,27 @@ King* Game::getKing(const std::string& color){
     return this->bKing;
 }
 
-void Game::performMovement(Piece* piece, Block* target){
-    this->updateCastling(piece, target);
+void Game::performMovement(GameMove move){
+    this->updateCastling(move.piece, move.target);
 
-    piece->getBlock()->setPiece(nullptr);
-    piece->setBlock(target);
-    if (piece->name == "piyon"){
-        auto targetCoord = target->getCoordinates();
-        if (piece->getColor() == "w" and targetCoord[1] == 8) {
+    move.piece->getBlock()->setPiece(nullptr);
+    move.piece->setBlock(move.target);
+    if (move.piece->name == "piyon"){
+        auto targetCoord = move.target->getCoordinates();
+        if (move.piece->getColor() == "w" and targetCoord[1] == 8) {
             auto queen = new Queen("w", this->getBlock(targetCoord[0], targetCoord[1]), this);
-            target->setPiece(queen);
+            move.target->setPiece(queen);
         }
-        else if (piece->getColor() == "b" and targetCoord[1] == 1) {
+        else if (move.piece->getColor() == "b" and targetCoord[1] == 1) {
             auto queen = new Queen("b", this->getBlock(targetCoord[0], targetCoord[1]), this);
-            target->setPiece(queen);
+            move.target->setPiece(queen);
         }
         else {
-            target->setPiece(piece);
+            move.target->setPiece(move.piece);
         }
     }
     else {
-        target->setPiece(piece);
+        move.target->setPiece(move.piece);
     }
     if(this->turn == "w"){
         this->turn = "b";
