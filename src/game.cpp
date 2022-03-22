@@ -182,10 +182,13 @@ King* Game::getKing(const std::string& color){
 void Game::performMovement(Move move){
     this->updateCastling(move.piece, move.target);
     if(move.target->getPiece() != nullptr){
-        delete move.target->getPiece();
+        // delete move.target->getPiece();
+        move.target->getPiece()->isCaptured = true;
         blackPlayer->updatePieces();
         whitePlayer->updatePieces();
     }
+    undoBlock = move.piece->getBlock();
+    undoPiece = move.target->getPiece();
     move.piece->getBlock()->setPiece(nullptr);
     move.piece->setBlock(move.target);
     if (move.piece->name == "piyon"){
@@ -212,7 +215,28 @@ void Game::performMovement(Move move){
         this->turn = "w";
     }
     this->update();
+    this->lastMove = move;
 }
+
+void Game::undoLastMove(){
+    lastMove.piece->setBlock(undoBlock);
+    undoBlock->setPiece(lastMove.piece);
+    lastMove.target->setPiece(undoPiece);
+    if(undoPiece != nullptr){
+        undoPiece->setBlock(lastMove.target);
+        undoPiece->isCaptured = false;
+        blackPlayer->updatePieces();
+        whitePlayer->updatePieces();
+    }
+
+    if(this->turn == "w"){
+        this->turn = "b";
+    }
+    else{
+        this->turn = "w";
+    }   
+}
+
 
 void Game::performCastling(King* king, Block* target) {
     this->updateCastling(king, target);

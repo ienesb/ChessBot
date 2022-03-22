@@ -24,6 +24,7 @@ Piece::Piece(std::string color, Block* block, Game* game) {
     this->color = color;
     this->block = block;
     this->game = game;
+    this->isCaptured = false;
 }
 
 void Piece::setBlock(Block *block) {

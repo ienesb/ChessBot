@@ -9,10 +9,11 @@
 class Player{
     private:
     std::string color; // "w" or "b"
-    Game* game;
     std::vector<Piece*> pieces;
+    std::vector<Piece*> capturedPieces;
 
     public:
+    Game* game;
     Player(std::string color, Game* game);
     std::string getColor();
     Game* getGame();

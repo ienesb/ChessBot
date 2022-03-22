@@ -36,8 +36,17 @@ void Player::printPieces(){
 void Player::updatePieces(){
     std::vector<Piece*>::iterator i = pieces.begin();
     for(Piece* p: pieces){
-        if(p->name.empty()){
+        if(p->isCaptured){
             pieces.erase(i);
+            capturedPieces.push_back(p);
+        }
+        i++; 
+    }
+    i = capturedPieces.begin();
+    for(Piece* p: capturedPieces){
+        if(!p->isCaptured){
+            capturedPieces.erase(i);
+            pieces.push_back(p);
         }
         i++; 
     }

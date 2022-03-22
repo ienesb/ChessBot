@@ -16,6 +16,7 @@ class Piece{
     Game* game;
 
     public:
+    bool isCaptured;
     std::string path = "";
     std::string name = "";
     cv::Mat image;

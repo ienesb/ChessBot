@@ -33,6 +33,9 @@ private:
     std::vector<int>* attackerCoord;
     Player* whitePlayer;
     Player* blackPlayer;
+    Move lastMove;
+    Block* undoBlock;
+    Piece* undoPiece;
 
     bool wCastlingLeft;
     bool wCastlingRight;
@@ -54,6 +57,7 @@ public:
     King* getKing(const std::string& color);
     void setCastlingRook(Rook* rook);
     void performMovement(Move move);
+    void undoLastMove();
     void performCastling(King* king, Block* target);
     void update();
 
