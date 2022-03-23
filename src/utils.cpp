@@ -1587,6 +1587,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                 if(checkMove_all(piece, game->getBlock(x, y)) == 0){
                     package.push_back(Move{.target = game->getBlock(x, y), .piece = piece});
                 }
+                break;
             case BISHOP:
                 // FORWARD, RIGHT
                 while (++x != 9 and ++y != 9) {
@@ -1619,6 +1620,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                     }
                     else break;
                 }
+                break;
             case ROOK:
                 // FORWARD
                 while (++y != 9){
@@ -1651,6 +1653,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                     }
                     else break;
                 }
+                break;
             case QUEEN:
                 // FORWARD, RIGHT
                 while (++x != 9 and ++y != 9) {
@@ -1715,6 +1718,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                     }
                     else break;
                 }
+                break;
             case KING:
                 // FORWARD, RIGHT
                 x = pieceCoord[0] + 1, y = pieceCoord[1] + 1;
@@ -1764,6 +1768,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                 x = pieceCoord[0] - 2;
                 if(checkMove_all(piece, game->getBlock(x, y)) == 1)
                     package.push_back(Move{.target = game->getBlock(x, y), .piece = piece});
+                break;
             case PAWN:
                 // WHITE PAWN
                 if (piece->getColor() == "w") {
@@ -1811,6 +1816,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                         package.push_back(Move{.target = game->getBlock(x, y), .piece = piece});
                     }
                 }
+                break;
         }
     }
     return package;
