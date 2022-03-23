@@ -505,6 +505,7 @@ static bool isCheck(std::vector<int>current, std::vector<int>target, Game *game)
 static int checkMove_all(Piece* piece, int x, int y){
     const int identifier = pieceMap[piece->name];
     // getting coordinates
+    if (!piece) return -7;
     auto currentCoord(piece->getBlock()->getCoordinates());
     const std::vector<int>targetCoord = {x, y};
     // checking whether the move is valid
@@ -1234,6 +1235,7 @@ int checkMove_all(Piece* piece, Block* target){
     std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2}, {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
     const int identifier = pieceMap[piece->name];
     // getting coordinates
+    if (!target or !piece) return -7;
     auto currentCoord(piece->getBlock()->getCoordinates());
     auto targetCoord(target->getCoordinates());
     // checking whether the move is valid
@@ -1585,6 +1587,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                 if(checkMove_all(piece, game->getBlock(x, y)) == 0){
                     package.push_back(Move{.target = game->getBlock(x, y), .piece = piece});
                 }
+                break;
             case BISHOP:
                 // FORWARD, RIGHT
                 while (++x != 9 and ++y != 9) {
@@ -1617,6 +1620,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                     }
                     else break;
                 }
+                break;
             case ROOK:
                 // FORWARD
                 while (++y != 9){
@@ -1649,6 +1653,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                     }
                     else break;
                 }
+                break;
             case QUEEN:
                 // FORWARD, RIGHT
                 while (++x != 9 and ++y != 9) {
@@ -1713,6 +1718,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                     }
                     else break;
                 }
+                break;
             case KING:
                 // FORWARD, RIGHT
                 x = pieceCoord[0] + 1, y = pieceCoord[1] + 1;
@@ -1762,6 +1768,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                 x = pieceCoord[0] - 2;
                 if(checkMove_all(piece, game->getBlock(x, y)) == 1)
                     package.push_back(Move{.target = game->getBlock(x, y), .piece = piece});
+                break;
             case PAWN:
                 // WHITE PAWN
                 if (piece->getColor() == "w") {
@@ -1809,6 +1816,7 @@ std::vector<Move> listMoves(std::vector<Piece*> pieces){
                         package.push_back(Move{.target = game->getBlock(x, y), .piece = piece});
                     }
                 }
+                break;
         }
     }
     return package;
