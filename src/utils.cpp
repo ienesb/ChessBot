@@ -505,6 +505,7 @@ static bool isCheck(std::vector<int>current, std::vector<int>target, Game *game)
 static int checkMove_all(Piece* piece, int x, int y){
     const int identifier = pieceMap[piece->name];
     // getting coordinates
+    if (!piece) return -7;
     auto currentCoord(piece->getBlock()->getCoordinates());
     const std::vector<int>targetCoord = {x, y};
     // checking whether the move is valid
@@ -1234,6 +1235,7 @@ int checkMove_all(Piece* piece, Block* target){
     std::map<std::string, int> pieceMap { {"at", 0}, {"fil", 1}, {"kale", 2}, {"vezir", 3}, {"sah", 4}, {"piyon", 5}};
     const int identifier = pieceMap[piece->name];
     // getting coordinates
+    if (!target or !piece) return -7;
     auto currentCoord(piece->getBlock()->getCoordinates());
     auto targetCoord(target->getCoordinates());
     // checking whether the move is valid
