@@ -10,14 +10,14 @@
 #include "game.h"
 #include "ui.h"
 
-void GameUi::setupUi(QMainWindow *MainWindow){
+void GameUi::setupUi(QMainWindow *MainWindow, int numberOfPlayers){
     if (MainWindow->objectName().isEmpty())
         MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
     MainWindow->resize(SIZE*8+50, SIZE*8+50);
     centralwidget = new QWidget(MainWindow);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
 
-    this->game = new Game(centralwidget);
+    this->game = new Game(centralwidget, numberOfPlayers);
     
     MainWindow->setCentralWidget(centralwidget);
     statusbar = new QStatusBar(MainWindow);

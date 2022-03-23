@@ -5,6 +5,7 @@
 #include <string>
 
 #include "game.h"
+#include "move.h"
 
 class Player{
     private:
@@ -14,7 +15,8 @@ class Player{
 
     public:
     Game* game;
-    Player(std::string color, Game* game);
+    std::string type;
+    Player(std::string color, Game* game, std::string type);
     std::string getColor();
     Game* getGame();
     void setPiece(Piece* piece);
@@ -22,6 +24,11 @@ class Player{
     std::vector<Piece*> getPieces();
     void printPieces();
     void updatePieces();
+    std::vector<Move> listAllMoves();
+    Move getBestMove(std::vector<Move> moves);
+    std::string encode(Move move);
+    std::string getBinaryBoard();
+    int exec(const char* cmd);
 };
 
 #endif

@@ -20,9 +20,9 @@ void startMenu(QMainWindow* mainWindow, QApplication* app){
     mainWindow->show();
 }
 
-void startGame(QMainWindow* mainWindow, QApplication* app){
+void startGame(QMainWindow* mainWindow, QApplication* app, int numberOfPlayers){
     GameUi ui;
-    ui.setupUi(mainWindow);
+    ui.setupUi(mainWindow, numberOfPlayers);
     mainWindow->show();
 }
 

@@ -50,7 +50,7 @@ private:
     
 public:
     Block* board[64]{};
-    Game(QWidget* centralWidget);
+    Game(QWidget* centralWidget, int numberOfPlayers);
     void press(Block* pressed);
     Block* getBlock(int x, int y);
     Block* getBlock(const std::vector<int>& coord);

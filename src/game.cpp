@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <random>
 
 #include "game.h"
 #include "block.h"
@@ -17,10 +18,15 @@
 #include "player.h"
 #include "move.h"
 
-Game::Game(QWidget* centralWidget) {
+Game::Game(QWidget* centralWidget, int numberOfPlayers) {
     int i,j;
-    this->whitePlayer = new Player("w", this);
-    this->blackPlayer = new Player("b", this);
+    this->whitePlayer = new Player("w", this, "player");
+    if(numberOfPlayers == 1){
+        this->blackPlayer = new Player("b", this, "bot");
+    }
+    else{
+        this->blackPlayer = new Player("b", this, "player");
+    }
     for(i = 0; i < 8; i++){
         for(j = 0; j < 8; j++){
             this->board[8*i+j] = new Block(centralWidget, this, j + 1, 8 - i);
@@ -210,6 +216,9 @@ void Game::performMovement(Move move){
     }
     if(this->turn == "w"){
         this->turn = "b";
+        // std::vector<Move> moves = blackPlayer->listAllMoves();
+        // int r = rand()%moves.size();
+        // performMovement(moves[r]);
     }
     else{
         this->turn = "w";
