@@ -216,9 +216,9 @@ void Game::performMovement(Move move){
     }
     if(this->turn == "w"){
         this->turn = "b";
-        // std::vector<Move> moves = blackPlayer->listAllMoves();
-        // int r = rand()%moves.size();
-        // performMovement(moves[r]);
+        std::vector<Move> moves = blackPlayer->listAllMoves();
+        int r = rand()%moves.size();
+        performMovement(moves[r]);
     }
     else{
         this->turn = "w";
