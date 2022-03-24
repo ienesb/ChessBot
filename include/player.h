@@ -25,10 +25,10 @@ class Player{
     void printPieces();
     void updatePieces();
     std::vector<Move> listAllMoves();
-    Move getBestMove(std::vector<Move> moves);
+    Move getBestMove();
     std::string encode(Move move);
     std::string getBinaryBoard();
-    int exec(const char* cmd);
+    float exec(const char* cmd);
 };
 
 #endif

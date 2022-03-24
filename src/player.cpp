@@ -60,13 +60,14 @@ std::vector<Move> Player::listAllMoves(){
     return listMoves(this->getPieces());
 }
 
-Move Player::getBestMove(std::vector<Move> moves){
+Move Player::getBestMove(){
+    std::vector<Move> moves = this->listAllMoves();
     Move bestMove;
-    int result = 0;
-    int prediction;
+    float result = 0;
+    float prediction;
     std::string cmd;
     for(Move m: moves){
-        cmd = "python inference.py";
+        cmd = "python3 ../ai/inference.py -i " + encode(m);
         prediction = this->exec(cmd.c_str());
         if(prediction > result){
             result = prediction;
@@ -83,7 +84,7 @@ std::string Player::encode(Move move){
     return result;
 }
 
-int Player::exec(const char* cmd) {
+float Player::exec(const char* cmd) {
     std::array<char, 128> buffer;
     std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
@@ -93,15 +94,17 @@ int Player::exec(const char* cmd) {
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
         result += buffer.data();
     }
-    return atoi(result.c_str());
+    return std::stof(result);
 }
 
 std::string Player::getBinaryBoard(){
     Block* block;
     Piece* piece;
-    char* c = (char*) malloc(sizeof(char)*12*64);
+    int size = 12*64;
+    char* c = (char*) malloc(sizeof(char)*size);
+    int i;
 
-    for(int i = 0; i < 12*64; i++){
+    for(i = 0; i < size; i++){
         c[i] = '0';
     }
 
@@ -157,6 +160,11 @@ std::string Player::getBinaryBoard(){
             }
         } 
     }
-    std::string result(c);
+    std::string result;
+    result = "";
+    for (i = 0; i < size; i++) {
+        result = result + c[i];
+    }
+    // std::cout << result << "\n\n\n";
     return result;
 }

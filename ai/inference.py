@@ -8,7 +8,7 @@ if __name__ == "__main__":
     parser.add_argument("-i", "--input", required=True)
 
     model = ChessBotModel()
-    model.load_state_dict(torch.load("model.pth"))
+    model.load_state_dict(torch.load("../ai/model.pth"))
     model.eval()
 
     inputStr = vars(parser.parse_args())["input"]
@@ -19,4 +19,5 @@ if __name__ == "__main__":
     X = X.astype(np.float32)
     X = torch.from_numpy(X)
     
-    print(model(X)[0])
+    result = model(X).cpu().detach().numpy()
+    print(result[0] - result[1])
