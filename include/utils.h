@@ -5,11 +5,6 @@
 #include "game.h"
 #include "move.h"
 
-//struct s_pieceMove{
-//    Piece* piece;
-//    std::vector<std::vector<int>> moveCoords;
-//};
-
 int checkMove_all(Piece* piece, Block* target);
 std::vector<int> isCheck_Game(const std::string& kingColor, Game *game);
 bool isCheckmate(King* king, Game* game);
