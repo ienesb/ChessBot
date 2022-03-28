@@ -70,5 +70,6 @@ if __name__ == "__main__":
         print(f"Epoch {e+1}\n-------------------------------")
         train(dataloader, model, loss_fn, optimizer)
         test(dataloader, model, loss_fn)
+    model.to("cpu")
     torch.save(model.state_dict(), "model.pth")
     print("Done!")
