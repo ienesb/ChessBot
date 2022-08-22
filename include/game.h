@@ -15,7 +15,7 @@
 #include "player.h"
 #include "move.h"
 
-#define SIZE 100
+#define SIZE 75
 
 class Piece;
 class Block;

@@ -12,7 +12,7 @@ file(GLOB SOURCES "src/*.cpp")
 
 add_executable(chess ${SOURCES} ${HEADERS})
 
-add_compile_options("-lstdc++fs")
+include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 target_link_libraries(chess ${OpenCV_LIBS})
 target_link_libraries(chess Qt5::Widgets)
