@@ -19,6 +19,9 @@ void Button::mousePressEvent(QMouseEvent *ev){
     if(type == "exit"){
         app->quit();
     }
+    else if(type == "multiplayer"){
+        //connect to server
+    }
     else{
         startGame(mainWindow, app, 2); // coop only     
     }
