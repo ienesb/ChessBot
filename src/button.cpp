@@ -19,11 +19,8 @@ void Button::mousePressEvent(QMouseEvent *ev){
     if(type == "exit"){
         app->quit();
     }
-    else if (type == "player1"){
-        startGame(mainWindow, app, 1);        
-    }
     else{
-        startGame(mainWindow, app, 2);        
+        startGame(mainWindow, app, 2); // coop only     
     }
 }
 

@@ -23,15 +23,24 @@ void Window::setupUi(QMainWindow *MainWindow, QApplication *app){
     base = new QLabel(centralwidget);
     base->setObjectName(QString::fromUtf8("base"));
     base->setGeometry(QRect(0, 0, 400, 300));
-    player1 = new Button(centralwidget, MainWindow, app, "player1");
-    player1->setObjectName(QString::fromUtf8("player1"));
-    player1->setGeometry(QRect(170, 110, 58, 18));
-    player2 = new Button(centralwidget, MainWindow, app, "player2");
-    player2->setObjectName(QString::fromUtf8("player2"));
-    player2->setGeometry(QRect(170, 170, 58, 18));
+    
+    coop = new Button(centralwidget, MainWindow, app, "coop");
+    coop->setObjectName(QString::fromUtf8("coop"));
+    coop->setGeometry(QRect(100, 30, 208, 50));
+
+    singleplayer = new Button(centralwidget, MainWindow, app, "singleplayer");
+    singleplayer->setObjectName(QString::fromUtf8("singleplayer"));
+    singleplayer->setGeometry(QRect(100, 90, 208, 50));
+
+    multiplayer = new Button(centralwidget, MainWindow, app, "multiplayer");
+    multiplayer->setObjectName(QString::fromUtf8("multiplayer"));
+    multiplayer->setGeometry(QRect(100, 150, 208, 50));
+
     exit = new Button(centralwidget, MainWindow, app, "exit");
     exit->setObjectName(QString::fromUtf8("exit"));
-    exit->setGeometry(QRect(170, 220, 58, 18));
+    exit->setGeometry(QRect(100, 210, 208, 50));
+
+    
     MainWindow->setCentralWidget(centralwidget);
     statusbar = new QStatusBar(MainWindow);
     statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -46,22 +55,26 @@ void Window::setupUi(QMainWindow *MainWindow, QApplication *app){
 void Window::retranslateUi(QMainWindow *MainWindow){
     MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
     std::string baseName{"../pngs/mainmenu/base.png"};
-    std::string player1Name{"../pngs/mainmenu/player1.png"};
-    std::string player2Name{"../pngs/mainmenu/player2.png"};
+    std::string coopName{"../pngs/mainmenu/co-op.png"};
+    std::string singleplayerName{"../pngs/mainmenu/singleplayer.png"};
+    std::string multiplayerName{"../pngs/mainmenu/multiplayer.png"};
     std::string exitName{"../pngs/mainmenu/exit.png"};
     
     QPixmap* baseImage;
-    QPixmap* player1Image;
-    QPixmap* player2Image;
+    QPixmap* coopImage;
+    QPixmap* singleplayerImage;
+    QPixmap* multiplayerImage;
     QPixmap* exitImage;
 
     baseImage = new QPixmap(baseName.c_str());
-    player1Image = new QPixmap(player1Name.c_str());
-    player2Image = new QPixmap(player2Name.c_str());
+    coopImage = new QPixmap(coopName.c_str());
+    singleplayerImage = new QPixmap(singleplayerName.c_str());
+    multiplayerImage = new QPixmap(multiplayerName.c_str());
     exitImage = new QPixmap(exitName.c_str());
     
     base->setPixmap(*baseImage);
-    player1->setPixmap(*player1Image);
-    player2->setPixmap(*player2Image);
+    coop->setPixmap(*coopImage);
+    multiplayer->setPixmap(*singleplayerImage);
+    singleplayer->setPixmap(*multiplayerImage);
     exit->setPixmap(*exitImage);
 } // retranslateUi

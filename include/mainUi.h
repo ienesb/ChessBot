@@ -16,8 +16,9 @@ class Window{
 public:
     QWidget* centralwidget;
     QLabel* base;
-    Button* player1;
-    Button* player2;
+    Button* coop;
+    Button* singleplayer;
+    Button* multiplayer;
     Button* exit;
     QStatusBar *statusbar;
 
