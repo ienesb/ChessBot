@@ -60,22 +60,22 @@ std::vector<Move> Player::listAllMoves(){
     return listMoves(this->getPieces());
 }
 
-Move Player::getBestMove(){
-    std::vector<Move> moves = this->listAllMoves();
-    Move bestMove;
-    float result = 0;
-    float prediction;
-    std::string cmd;
-    for(Move m: moves){
-        cmd = "python3 ../ai/inference.py -i " + encode(m);
-        prediction = this->exec(cmd.c_str());
-        if(prediction > result){
-            result = prediction;
-            bestMove = m;
-        }
-    }
-    return bestMove;
-}
+// Move Player::getBestMove(){
+//     std::vector<Move> moves = this->listAllMoves();
+//     Move bestMove;
+//     float result = 0;
+//     float prediction;
+//     std::string cmd;
+//     for(Move m: moves){
+//         cmd = "python3 ../ai/inference.py -i " + encode(m);
+//         prediction = this->exec(cmd.c_str());
+//         if(prediction > result){
+//             result = prediction;
+//             bestMove = m;
+//         }
+//     }
+//     return bestMove;
+// }
 
 std::string Player::encode(Move move){
     this->game->performMovement(move);

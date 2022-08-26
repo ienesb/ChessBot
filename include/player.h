@@ -25,7 +25,7 @@ class Player{
     void printPieces();
     void updatePieces();
     std::vector<Move> listAllMoves();
-    Move getBestMove();
+    // Move getBestMove();
     std::string encode(Move move);
     std::string getBinaryBoard();
     float exec(const char* cmd);
