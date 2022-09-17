@@ -6,7 +6,6 @@
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <QPixmap>
-#include <opencv2/opencv.hpp>
 
 #include <iostream>
 #include <sstream>
@@ -68,42 +67,26 @@ std::string Block::getColor(){
 
 void Block::update(){
     QPixmap* image;
-    if(this->piece == nullptr){
-        if(this->isClicked){
-            image = new QPixmap(this->clickedPath.c_str());
-        }
-        else if(this->color == "w"){
-            image = new QPixmap(this->whitePath.c_str());
-        }
-        else{
-            image = new QPixmap(this->blackPath.c_str());
-        }
+
+    if(this->isClicked){
+        image = new QPixmap(this->clickedPath.c_str());
+    }
+    else if(this->color == "w"){
+        image = new QPixmap(this->whitePath.c_str());
     }
     else{
-        cv::Mat baseImage;
-
-        if(this->isClicked){
-            baseImage = cv::imread(this->clickedPath, 1);
-        }
-        else if(this->color == "w"){
-            baseImage = cv::imread(this->whitePath, 1);
-        }
-        else{
-            baseImage = cv::imread(this->blackPath, 1);
-        }
-        
-        if(this->piece->getColor() == "w"){
-            baseImage.setTo(255, this->piece->image==255);
-        }
-        else{
-            baseImage.setTo(0, this->piece->image==255);
-        }
-
-        cv::resize(baseImage, baseImage, cv::Size(SIZE, SIZE), cv::INTER_LINEAR);
-
-        cv::imwrite(name, baseImage);
-        image = new QPixmap(name.c_str());
-
+        image = new QPixmap(this->blackPath.c_str());
     }
-    this->setPixmap(*image);
+    
+    if(this->piece != nullptr){
+        
+        QRgb rgb = QColor("black").rgb();
+        QPixmap mask = QPixmap::fromImage(this->piece->image.createMaskFromColor(rgb));
+    
+        QPainter p(image);
+        p.setClipRegion(QRegion(mask));
+        p.setBrush(this->piece->getQColor());
+        p.drawEllipse(0, 0, 200, 200);  
+    }
+    this->setPixmap((*image).scaled(SIZE, SIZE));
 }

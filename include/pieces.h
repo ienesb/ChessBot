@@ -1,7 +1,9 @@
 #ifndef PIECES
 #define PIECES
 
-#include <opencv2/opencv.hpp>
+#include <QPainter>
+#include <QBitmap>
+#include <QPixmap>
 
 #include "game.h"
 #include "block.h"
@@ -12,6 +14,7 @@ class Block;
 class Piece{
     private:
     std::string color; // "w" or "b"
+    QColor qcolor;
     Block* block;
     Game* game;
 
@@ -19,11 +22,12 @@ class Piece{
     bool isCaptured;
     std::string path = "";
     std::string name = "";
-    cv::Mat image;
+    QImage image;
     Piece(std::string color, Block* block, Game* game);
     void setBlock(Block* block);
     Block* getBlock();
     std::string getColor();
+    QColor getQColor();
     int checkMove(Block* target);
     Game* getGame();
 };
