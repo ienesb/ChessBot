@@ -12,19 +12,9 @@
 #include <string>
 
 #include "button.h"
-#include "ui.h"
-#include "main.h"
 
 void Button::mousePressEvent(QMouseEvent *ev){
-    if(type == "exit"){
-        app->quit();
-    }
-    else if(type == "multiplayer"){
-        //connect to server
-    }
-    else{
-        startGame(mainWindow, app, 2); // coop only     
-    }
+
 }
 
 Button::Button(QWidget* widget, QMainWindow* mainWindow, QApplication* app, std::string type):QLabel::QLabel(widget){

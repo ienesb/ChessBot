@@ -11,9 +11,9 @@
 #include <sstream>
 #include <vector>
 
-#include "game.h"
 #include "block.h"
 #include "pieces.h"
+#include "game.h"
 
 
 void Block::mousePressEvent(QMouseEvent *ev){
@@ -82,7 +82,6 @@ void Block::update(){
         
         QRgb rgb = QColor("black").rgb();
         QPixmap mask = QPixmap::fromImage(this->piece->image.createMaskFromColor(rgb));
-    
         QPainter p(image);
         p.setClipRegion(QRegion(mask));
         p.setBrush(this->piece->getQColor());
