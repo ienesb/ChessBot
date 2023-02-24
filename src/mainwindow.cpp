@@ -32,3 +32,4 @@ void MainWindow::on_bt_local_clicked()
     ui.setupUi(this, 2);
     this->show();
 }
+

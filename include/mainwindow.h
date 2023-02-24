@@ -23,6 +23,8 @@ private slots:
 
     void on_bt_single_clicked();
 
+    void on_bt_local_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
