@@ -16,9 +16,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_bt_single_clicked()
 {
-    GameUi ui;
-    ui.setupUi(this, 2);
-    this->show();
+
 }
 
 
@@ -27,3 +25,10 @@ void MainWindow::on_bt_exit_clicked()
     emit this->quit_app();
 }
 
+
+void MainWindow::on_bt_local_clicked()
+{
+    GameUi ui;
+    ui.setupUi(this, 2);
+    this->show();
+}
