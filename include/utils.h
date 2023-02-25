@@ -3,7 +3,6 @@
 
 #include <vector>
 #include "game.h"
-#include "move.h"
 
 int checkMove_all(Piece* piece, Block* target);
 std::vector<int> isCheck_Game(const std::string& kingColor, Game *game);

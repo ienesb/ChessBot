@@ -9,17 +9,12 @@
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <QPixmap>
+#define SIZE 75
 
 #include "block.h"
 #include "pieces.h"
-#include "player.h"
 #include "move.h"
-
-#define SIZE 75
-
-class Piece;
-class Block;
-class Player;
+#include "player.h"
 
 class Game{
 private:

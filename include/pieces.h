@@ -5,9 +5,6 @@
 #include <QBitmap>
 #include <QPixmap>
 
-#include "game.h"
-#include "block.h"
-
 class Game;
 class Block;
 

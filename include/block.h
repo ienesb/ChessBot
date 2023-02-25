@@ -9,17 +9,15 @@
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <QPixmap>
-
 #include <iostream>
 #include <vector>
 
-#include "game.h"
 #include "pieces.h"
-
-class Piece;
 class Game;
 
 class Block : public QLabel{
+    Q_OBJECT
+
     private:
     Piece* piece;
     Game* game;
@@ -29,6 +27,7 @@ class Block : public QLabel{
     int y;
 
     public:
+    explicit Block(QObject *parent = nullptr);
     bool isClicked;
     std::string whitePath;
     std::string blackPath;
@@ -41,6 +40,10 @@ class Block : public QLabel{
     std::vector<int> getCoordinates();
     std::string getColor();
     void update();
+
+signals:
+
+public slots:
 
 };
 
