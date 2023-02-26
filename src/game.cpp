@@ -6,6 +6,7 @@
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
 #include <QPixmap>
+#include <QDebug>
 
 #include <iostream>
 #include <vector>
@@ -18,15 +19,35 @@
 #include "player.h"
 #include "move.h"
 
-Game::Game(QWidget* centralWidget, int numberOfPlayers) {
-    int i,j;
-    this->whitePlayer = new Player("w", this, "player");
-    if(numberOfPlayers == 1){
+Game::Game(QWidget* centralWidget, int gameMode = 0) {
+    /* gameMode:
+        0 -> singleplayer
+        1 -> local 2-player
+        2 -> online2plyr - host mode
+        3 -> online2plyr - join mode
+    */
+    if(gameMode == 0){
+        this->whitePlayer = new Player("w", this, "player");
         this->blackPlayer = new Player("b", this, "bot");
     }
-    else{
-        this->blackPlayer = new Player("b", this, "player");
+    else if(gameMode == 1){
+        this->whitePlayer = new Player("w", this, "player1");
+        this->blackPlayer = new Player("b", this, "player2");
     }
+    else if(gameMode == 2){
+        this->whitePlayer = new Player("w", this, "player1");
+        this->blackPlayer = new Player("b", this, "player2");
+    }
+    else if(gameMode == 3){
+        this->whitePlayer = new Player("w", this, "player1");
+        this->blackPlayer = new Player("b", this, "player2");
+    }
+    else{
+        qInfo() << QString("Error: variable 'gameMode' is set to %1. But, "
+                           "it should be between 0 to 3.").arg(gameMode);
+    }
+
+    int i,j;
     for(i = 0; i < 8; i++){
         for(j = 0; j < 8; j++){
             this->board[8*i+j] = new Block(centralWidget, this, j + 1, 8 - i);

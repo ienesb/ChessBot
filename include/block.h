@@ -18,7 +18,7 @@ class Game;
 class Block : public QLabel{
     Q_OBJECT
 
-    private:
+private:
     Piece* piece;
     Game* game;
     std::string color; // "w" or "b"
@@ -26,15 +26,15 @@ class Block : public QLabel{
     int x; //coordinates
     int y;
 
-    public:
-    explicit Block(QObject *parent = nullptr);
+public:
+    //explicit Block(QObject *parent = nullptr);
+    Block(QWidget* widget, Game* game, int x, int y);
+    ~Block();
     bool isClicked;
     std::string whitePath;
     std::string blackPath;
     std::string clickedPath;
     void mousePressEvent(QMouseEvent *ev);
-    Block(QWidget* widget, Game* game, int x, int y);
-    ~Block();
     void setPiece(Piece* piece);
     Piece* getPiece();
     std::vector<int> getCoordinates();

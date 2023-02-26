@@ -25,6 +25,22 @@ private slots:
 
     void on_bt_local_clicked();
 
+    void on_bt_online_clicked();
+
+    void on_bt_back_online_clicked();
+
+    void on_bt_host_clicked();
+
+    void on_bt_back_host_clicked();
+
+    void on_bt_start_server_clicked();
+
+    void on_bt_join_clicked();
+
+    void on_bt_back_join_clicked();
+
+    void on_bt_join_server_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

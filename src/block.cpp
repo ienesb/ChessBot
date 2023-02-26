@@ -1,11 +1,4 @@
-#include <QtCore/QVariant>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QWidget>
-#include <QMouseEvent>
-#include <QPixmap>
+#include <QDebug>
 
 #include <iostream>
 #include <sstream>
@@ -18,9 +11,11 @@
 
 void Block::mousePressEvent(QMouseEvent *ev){
     this->game->press(this);
+    qInfo() << ev->pos();
 }
 
 Block::Block(QWidget* widget, Game* game, int x, int y):QLabel::QLabel(widget){
+    this->setMouseTracking(true);
     this->game = game;
     this->x = x;
     this->y = y;
@@ -85,7 +80,7 @@ void Block::update(){
         QPainter p(image);
         p.setClipRegion(QRegion(mask));
         p.setBrush(this->piece->getQColor());
-        p.drawEllipse(0, 0, 200, 200);  
+        p.drawEllipse(0, 0, 200, 200);
     }
     this->setPixmap((*image).scaled(SIZE, SIZE));
 }
