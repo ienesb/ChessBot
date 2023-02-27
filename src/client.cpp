@@ -23,9 +23,8 @@ void Client::doConnect(){
 
     qDebug() << "connecting...";
 
-    // this is not blocking call
     socket->connectToHost(this->host_addr, this->host_port);
-    // we need to wait...
+
     if(!socket->waitForConnected(5000))
     {
         qDebug() << "Error: " << socket->errorString();
@@ -41,6 +40,7 @@ void Client::connected()
 void Client::disconnected()
 {
     qDebug() << "disconnected...";
+    socket->close();
 }
 
 void Client::bytesWritten(qint64 bytes)
@@ -50,9 +50,5 @@ void Client::bytesWritten(qint64 bytes)
 
 void Client::readyRead()
 {
-//    qDebug() << "reading...";
-
-//    // read the data from the socket
-//    qDebug() << socket->readAll();
     window->isDataCame = true;
 }

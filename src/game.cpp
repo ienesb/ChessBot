@@ -149,17 +149,15 @@ void Game::press(Block *pressed) {
             int code = chosen->getPiece()->checkMove(pressed);
 
             if(code == 0){
-                std::cout << "success\n";
+                qDebug() << "success";
                 Move move;
                 move.target = pressed;
                 move.piece = chosen->getPiece();
 
                 auto current = move.piece->getBlock()->getCoordinates();
                 auto target = move.target->getCoordinates();
-                qDebug() << "current:" << current;
-                qDebug() << "target:" << target;
                 move_coord = std::vector<int>{current[0], current[1],
-            target[0], target[1]};
+                                            target[0], target[1]};
                 qDebug() << "move_coord:" << move_coord;
                 move_done = true;
 
@@ -170,28 +168,28 @@ void Game::press(Block *pressed) {
 
                 this->updateCheck();
                 if(this->isCheck){
-                    std::cout << "CHECK " << this->turn << "\n";
+                    qDebug() << "CHECK " << QString::fromStdString(this->turn);
                     if(isCheckmate(getKing(this->turn), this)){
-                        std::cout << "Checkmate !!!\n" << "Game Over\n";
+                        qDebug() << "Checkmate !!!\n" << "Game Over\n";
                     }
                 }
             }
             else if (code == 1){
-                std::cout << "success castling\n";
+                qDebug() << "success castling";
                 this->performCastling(static_cast<King *>(chosen->getPiece()), pressed);
                 chosen->isClicked = false;
                 chosen = nullptr;
 
                 this->updateCheck();
                 if(this->isCheck){
-                    std::cout << "CHECK " << this->turn << "\n";
+                    qDebug() << "CHECK " << QString::fromStdString(this->turn);
                     if(isCheckmate(getKing(this->turn), this)){
-                        std::cout << "Checkmate !!!\n" << "Game Over\n";
+                        qDebug() << "Checkmate !!!\n" << "Game Over\n";
                     }
                 }
             }
             else {
-                std::cout << "error " << code << "\n";
+                qDebug() << "error:" << code;
             }
         }
     }

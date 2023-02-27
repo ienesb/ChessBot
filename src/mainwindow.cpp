@@ -44,78 +44,55 @@ void MainWindow::start_server_game()
 void MainWindow::online_game_loop(QTcpSocket* socket)
 {
     socket->setReadBufferSize(7);
-    QString str_data;
-    QString data_loop;
+    QString str_send_data;
     std::vector<int> data{};
     std::vector<int>& coord = game->move_coord;
+
     while (true)
     {
         if(isDataCame)
         {
 
             QByteArray raw_data = socket->readAll();
-            QString str = QTextCodec::codecForName("UTF-8")->
+            QString str_read_data = QTextCodec::codecForName("UTF-8")->
                     toUnicode(raw_data);
-//            QByteArray buffer;
-//            QDataStream socketStream(socket);
-//            socketStream.setVersion(QDataStream::Qt_5_15);
 
-//            socketStream.startTransaction();
-//            socketStream >> buffer;
-//            if(!socketStream.commitTransaction())
-//            {
-//                QString sss = QString("%1 :: Waiting for more data to come..").arg(socket->socketDescriptor());
-//                return;
-//            }
+            if(str_send_data != str_read_data && raw_data.size() == 7){
+                qDebug() << "send message:" << str_read_data;
 
-//            // QString header = buffer.mid(0);
-//            // QString str_data = header.split(",")[0].split(":")[1];
 
-            if(str_data != str && raw_data.size() == 7){
-            qDebug() << "send message:" << str;
+                foreach(QString data_loop, str_read_data.split(";"))
+                {
+                    data.push_back(data_loop.toInt());
+                }
 
-            foreach(data_loop, str.split(";"))
-            {
-                data.push_back(data_loop.toInt());
-            }
-
-            game->setChosen(game->getBlock(
-                                data[0], data[1]));
-            game->press(game->getBlock(
-                                data[2], data[3]));
-            data.clear();
-            isDataCame = false;
-            str_data = str;
+                game->setChosen(game->getBlock(
+                                    data[0], data[1]));
+                game->press(game->getBlock(
+                                    data[2], data[3]));
+                data.clear();
+                isDataCame = false;
+                str_send_data = str_read_data;
             }
 
         }
         else if(game->move_done)
         {
 
-            str_data = "";
+            str_send_data = "";
             for(auto& i: coord){
-                str_data = str_data + QString::number(i) + ";";
+                str_send_data = str_send_data + QString::number(i) + ";";
             }
-            str_data.chop(1);
-//            QDataStream socketStream(socket);
-//            socketStream.setVersion(QDataStream::Qt_5_15);
+            str_send_data.chop(1);
 
             QByteArray message;
-            message.prepend(str_data.toUtf8());
+            message.prepend(str_send_data.toUtf8());
             message.resize(7);
+
             qDebug() << "send message:" << message;
 
-//            QByteArray byteArray = str.toUtf8();
-//            byteArray.prepend(header);
-
-            //socketStream.setVersion(QDataStream::Qt_5_15);
-            //socketStream << message;
             socket->write(message);
             socket->flush();
-//            socket->write(str_data.toUtf8());
-//            socket->flush();
-//            socket->waitForBytesWritten(3000);
-//            socket->close();
             game->move_done = false;
         }
         delay();
@@ -130,21 +107,6 @@ void MainWindow::start_client_game()
     this->show();
     online_game_loop(client->get_socket());
 }
-
-
-//void MainWindow::client_readyRead()
-//{
-//    QByteArray raw_data = client->get_socket()->readAll();
-//    QString data = QTextCodec::codecForName("UTF-8")->
-//            toUnicode(raw_data);
-//    if(data == "CHESSBOT TEST SERVER"){
-//        GameUi ui;
-//        ui.setupUi(this, 3);
-//        this->show();
-//    }
-//    client->get_socket()->write("CHESSBOT TEST CLIENT");
-//    qInfo() << data;
-//}
 
 void MainWindow::on_bt_single_clicked()
 {
