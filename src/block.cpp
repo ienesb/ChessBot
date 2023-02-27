@@ -10,8 +10,14 @@
 
 
 void Block::mousePressEvent(QMouseEvent *ev){
-    this->game->press(this);
-    qInfo() << ev->pos();
+    if(game->gameMode == 1){
+        game->press(this);
+    }
+    else
+    {
+        if(game->turn == game->mePlayer->getColor())
+            game->press(this);
+    }
 }
 
 Block::Block(QWidget* widget, Game* game, int x, int y):QLabel::QLabel(widget){

@@ -19,7 +19,7 @@ class GameUi{
     QLabel *label;
     QStatusBar *statusbar;
 
-    void setupUi(QMainWindow *MainWindow, int numberOfPlayers);
+    Game* setupUi(QMainWindow *MainWindow, int numberOfPlayers);
     void retranslateUi(QMainWindow *MainWindow);
 
 };

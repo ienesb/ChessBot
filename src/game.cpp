@@ -19,15 +19,18 @@
 #include "player.h"
 #include "move.h"
 
-Game::Game(QWidget* centralWidget, int gameMode = 0) {
+Game::Game(QWidget* centralWidget, int gameMode) {
     /* gameMode:
         0 -> singleplayer
         1 -> local 2-player
         2 -> online2plyr - host mode
         3 -> online2plyr - join mode
     */
+    this->gameMode = gameMode;
+
     if(gameMode == 0){
         this->whitePlayer = new Player("w", this, "player");
+        this->mePlayer = whitePlayer;
         this->blackPlayer = new Player("b", this, "bot");
     }
     else if(gameMode == 1){
@@ -35,12 +38,14 @@ Game::Game(QWidget* centralWidget, int gameMode = 0) {
         this->blackPlayer = new Player("b", this, "player2");
     }
     else if(gameMode == 2){
-        this->whitePlayer = new Player("w", this, "player1");
-        this->blackPlayer = new Player("b", this, "player2");
+        this->whitePlayer = new Player("w", this, "me");
+        this->mePlayer = whitePlayer;
+        this->blackPlayer = new Player("b", this, "opponent");
     }
     else if(gameMode == 3){
-        this->whitePlayer = new Player("w", this, "player1");
-        this->blackPlayer = new Player("b", this, "player2");
+        this->whitePlayer = new Player("w", this, "opponent");
+        this->blackPlayer = new Player("b", this, "me");
+        this->mePlayer = blackPlayer;
     }
     else{
         qInfo() << QString("Error: variable 'gameMode' is set to %1. But, "
@@ -141,14 +146,25 @@ void Game::press(Block *pressed) {
             pressed->isClicked = true;
         }
         else{
-            int code = chosen->getPiece()->checkMove(pressed);;
+            int code = chosen->getPiece()->checkMove(pressed);
 
             if(code == 0){
                 std::cout << "success\n";
                 Move move;
                 move.target = pressed;
                 move.piece = chosen->getPiece();
+
+                auto current = move.piece->getBlock()->getCoordinates();
+                auto target = move.target->getCoordinates();
+                qDebug() << "current:" << current;
+                qDebug() << "target:" << target;
+                move_coord = std::vector<int>{current[0], current[1],
+            target[0], target[1]};
+                qDebug() << "move_coord:" << move_coord;
+                move_done = true;
+
                 this->performMovement(move);
+
                 chosen->isClicked = false;
                 chosen = nullptr;
 
@@ -348,4 +364,9 @@ std::vector<bool> Game::getCastling() const{
 
 void Game::setCastlingRook(Rook* rook) {
     this->castlingRook = rook;
+}
+
+void Game::setChosen(Block* block)
+{
+    this->chosen = block;
 }

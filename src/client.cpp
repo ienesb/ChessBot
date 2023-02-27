@@ -1,12 +1,16 @@
 #include "client.h"
+#include "mainwindow.h"
 
-Client::Client(QString host_addr,
-               quint16 host_port,
+Client::Client(MainWindow *window,
                QObject *parent)
     : QObject{parent}
 {
-    this->host_addr = host_addr;
-    this->host_port = host_port;
+    this->window = window;
+}
+
+QTcpSocket* Client::get_socket()
+{
+    return socket;
 }
 
 void Client::doConnect(){
@@ -21,7 +25,6 @@ void Client::doConnect(){
 
     // this is not blocking call
     socket->connectToHost(this->host_addr, this->host_port);
-
     // we need to wait...
     if(!socket->waitForConnected(5000))
     {
@@ -32,9 +35,7 @@ void Client::doConnect(){
 void Client::connected()
 {
     qDebug() << "connected...";
-
-    // Hey server, tell me about you.
-    socket->write("HEAD / HTTP/1.0\r\n\r\n\r\n\r\n");
+    window->start_client_game();
 }
 
 void Client::disconnected()
@@ -49,8 +50,9 @@ void Client::bytesWritten(qint64 bytes)
 
 void Client::readyRead()
 {
-    qDebug() << "reading...";
+//    qDebug() << "reading...";
 
-    // read the data from the socket
-    qDebug() << socket->readAll();
+//    // read the data from the socket
+//    qDebug() << socket->readAll();
+    window->isDataCame = true;
 }

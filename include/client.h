@@ -6,25 +6,28 @@
 #include <QAbstractSocket>
 #include <QDebug>
 
+class MainWindow;
+
 class Client : public QObject
 {
     Q_OBJECT
 public:
-    explicit Client(QString host_addr = "",
-                    quint16 host_port = 0,
+    explicit Client(MainWindow *window = nullptr,
                     QObject *parent = nullptr);
     void doConnect();
+    QTcpSocket* get_socket();
+    QString host_addr;
+    quint16 host_port;
 public slots:
     void connected();
     void disconnected();
     void bytesWritten(qint64 bytes);
     void readyRead();
 signals:
+    void send_readyRead();
 private:
     QTcpSocket *socket;
-    QString host_addr;
-    quint16 host_port;
-
+    MainWindow *window;
 };
 
 #endif // CLIENT_H

@@ -18,16 +18,16 @@
 
 class Game{
 private:
-    // int numberOfPlayer{};
+    std::string turn;
     King* wKing;
     King* bKing;
     Rook* castlingRook;
     Block* chosen;
-    std::string turn;
     bool isCheck;
     std::vector<int>* attackerCoord;
     Player* whitePlayer;
     Player* blackPlayer;
+    Player* mePlayer;
     Move lastMove;
     Block* undoBlock;
     Piece* undoPiece;
@@ -44,8 +44,9 @@ private:
 
     
 public:
+    int gameMode;
     Block* board[64]{};
-    Game(QWidget* centralWidget, int numberOfPlayers);
+    Game(QWidget* centralWidget, int gameMode);
     void press(Block* pressed);
     Block* getBlock(int x, int y);
     Block* getBlock(const std::vector<int>& coord);
@@ -55,9 +56,14 @@ public:
     void undoLastMove();
     void performCastling(King* king, Block* target);
     void update();
+    void setChosen(Block* block);
+
+    bool move_done = false;
+    std::vector<int> move_coord;
 
     void updateCheck();
     std::vector<int>* getAttacker() const;
     std::vector<bool> getCastling() const;
+friend class Block;
 };
 #endif

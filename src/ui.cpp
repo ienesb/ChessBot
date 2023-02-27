@@ -10,7 +10,7 @@
 #include "game.h"
 #include "ui.h"
 
-void GameUi::setupUi(QMainWindow *MainWindow, int gameMode){
+Game* GameUi::setupUi(QMainWindow *MainWindow, int gameMode){
     if (MainWindow->objectName().isEmpty())
         MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
     MainWindow->resize(SIZE*8+50, SIZE*8+50);
@@ -27,6 +27,8 @@ void GameUi::setupUi(QMainWindow *MainWindow, int gameMode){
     retranslateUi(MainWindow);
 
     QMetaObject::connectSlotsByName(MainWindow);
+
+    return this->game;
 } // setupUi
 
 void GameUi::retranslateUi(QMainWindow *MainWindow){
