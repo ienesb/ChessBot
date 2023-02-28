@@ -15,5 +15,13 @@
         <file>pngs/pieces/sah.png</file>
         <file>pngs/pieces/vezir.png</file>
         <file>pngs/Loading_icon.gif</file>
+        <file>sounds/eat_piece1.mp3</file>
+        <file>sounds/eat_piece2.mp3</file>
+        <file>sounds/eat_piece3.mp3</file>
+        <file>sounds/move_piece1.mp3</file>
+        <file>sounds/move_piece2.mp3</file>
+        <file>sounds/move_piece3.mp3</file>
+        <file>sounds/eat_piece4.mp3</file>
+        <file>sounds/move_piece4.mp3</file>
     </qresource>
 </RCC>

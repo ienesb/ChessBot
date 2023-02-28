@@ -1,6 +1,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
+// #include <QRandomGenerator>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
@@ -126,6 +127,9 @@ Game::Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout) {
     this->bCastlingLeft = true;
     this->bCastlingRight = true;
     this->update();
+
+    player = new QMediaPlayer;
+    player->setVolume(100);
 }
 
 void Game::press(Block *pressed) {
@@ -162,6 +166,10 @@ void Game::press(Block *pressed) {
                 qDebug() << "move_coord:" << move_coord;
                 move_done = true;
 
+                if(pressed->getPiece() == nullptr)
+                    play_chess_sound(0);
+                else play_chess_sound(1);
+
                 this->performMovement(move);
 
                 chosen->isClicked = false;
@@ -177,6 +185,7 @@ void Game::press(Block *pressed) {
             }
             else if (code == 1){
                 qDebug() << "success castling";
+                play_chess_sound(2);
                 this->performCastling(static_cast<King *>(chosen->getPiece()), pressed);
                 chosen->isClicked = false;
                 chosen = nullptr;
@@ -368,4 +377,32 @@ void Game::setCastlingRook(Rook* rook) {
 void Game::setChosen(Block* block)
 {
     this->chosen = block;
+}
+
+void Game::play_chess_sound(int mode){
+
+    player->stop();
+
+    // int randIndex = QRandomGenerator::global()->bounded(1,4);
+    static int randIndex = 0;
+    randIndex++;
+
+    if(!(randIndex <= 4 && randIndex >= 1)){
+        randIndex = 1;
+    }
+
+    qDebug() << "randIndex:" << randIndex;
+
+    if(mode == 0)
+    {
+        player->setMedia(QUrl(QString("qrc:/sounds/move_piece%1.mp3").arg(randIndex)));
+    }
+    else if(mode == 1){
+        player->setMedia(QUrl(QString("qrc:/sounds/eat_piece%1.mp3").arg(randIndex)));
+    }
+    else if(mode == 2)
+    {
+        // castling sound
+    }
+    player->play();
 }

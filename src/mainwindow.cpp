@@ -6,6 +6,7 @@
 #include <QTextCodec>
 #include <QAbstractSocket>
 
+
 void delay(int msec = 150)
 {
     QTime dieTime = QTime::currentTime().addMSecs(msec);
@@ -233,7 +234,6 @@ void MainWindow::bt_back_game_clicked(){
     if(gameMode == 2){
         if(server->get_socket()->state() == QAbstractSocket::ConnectedState){
             server->get_socket()->close();
-
         }
 
     }
@@ -242,7 +242,6 @@ void MainWindow::bt_back_game_clicked(){
             client->get_socket()->close();
         }
     }
-//    delete game;
     ui->stackedWidget->setCurrentIndex(0);
 }
 

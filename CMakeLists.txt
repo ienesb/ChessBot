@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_PREFIX_PATH "/opt/Qt/5.15.2/gcc_64")
-find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Network Multimedia REQUIRED)
 
 include_directories(include)
 file(GLOB HEADERS "include/*.h")
@@ -27,7 +27,7 @@ set(PROJECT_SOURCES
 add_executable(ChessBot ${PROJECT_SOURCES})
 
 
-target_link_libraries(ChessBot PRIVATE Qt5::Widgets Qt5::Network)
+target_link_libraries(ChessBot PRIVATE Qt5::Widgets Qt5::Network Qt5::Multimedia)
 
 set_target_properties(ChessBot PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

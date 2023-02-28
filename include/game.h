@@ -8,6 +8,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
+#include <QtMultimedia/QMediaPlayer>
 #include <QMouseEvent>
 #include <QPixmap>
 #define SIZE 75
@@ -33,6 +34,8 @@ private:
     Block* undoBlock;
     Piece* undoPiece;
 
+    QMediaPlayer *player;
+
     bool wCastlingLeft;
     bool wCastlingRight;
     bool bCastlingLeft;
@@ -42,6 +45,7 @@ private:
     const std::vector<std::vector<int>> wCastlingRightCoords = {{6,1},{7,1}};
     const std::vector<std::vector<int>> bCastlingRightCoords = {{6,8},{7,8}};
     void updateCastling(Piece* piece, Block* target);
+    void play_chess_sound(int mode);
 
     
 public:
