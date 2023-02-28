@@ -39,7 +39,7 @@ QTcpSocket* Server::get_socket()
 
 void Server::newConnection()
 {
-
+    qDebug() << "meow";
     socket = server->nextPendingConnection();
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
@@ -50,7 +50,9 @@ void Server::newConnection()
 void Server::disconnected()
 {
     qDebug() << "disconnected...";
-    socket->close();
+    window->isDataCame = false;
+    window->exit_game_loop = true;
+//    socket->deleteLater();
 }
 
 void Server::bytesWritten(qint64 bytes)

@@ -5,6 +5,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 #include <QMouseEvent>
@@ -28,7 +29,8 @@ private:
 
 public:
     //explicit Block(QObject *parent = nullptr);
-    Block(QWidget* widget, Game* game, int x, int y);
+    Block(QWidget* widget, Game* game,
+          int x, int y, QGridLayout* gridLayout);
     ~Block();
     bool isClicked;
     std::string whitePath;

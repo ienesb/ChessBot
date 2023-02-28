@@ -21,6 +21,7 @@ set(PROJECT_SOURCES
         ${SOURCES}
         ${HEADERS}
         mainwindow.ui
+        rc_chessbot.qrc
 )
 
 add_executable(ChessBot ${PROJECT_SOURCES})

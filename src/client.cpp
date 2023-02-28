@@ -6,6 +6,12 @@ Client::Client(MainWindow *window,
     : QObject{parent}
 {
     this->window = window;
+    socket = new QTcpSocket(this);
+
+    connect(socket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 }
 
 QTcpSocket* Client::get_socket()
@@ -14,12 +20,6 @@ QTcpSocket* Client::get_socket()
 }
 
 void Client::doConnect(){
-    socket = new QTcpSocket(this);
-
-    connect(socket, SIGNAL(connected()), this, SLOT(connected()));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
 
     qDebug() << "connecting...";
 
@@ -40,6 +40,8 @@ void Client::connected()
 void Client::disconnected()
 {
     qDebug() << "disconnected...";
+    window->isDataCame = false;
+    window->exit_game_loop = true;
     socket->close();
 }
 

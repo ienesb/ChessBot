@@ -5,6 +5,7 @@
 
 #include "server.h"
 #include "client.h"
+#include "ui.h"
 #include "game.h"
 
 QT_BEGIN_NAMESPACE
@@ -26,6 +27,9 @@ public:
 
 signals:
     void quit_app();
+
+public slots:
+    void bt_back_game_clicked();
 
 private slots:
     void on_bt_exit_clicked();
@@ -59,8 +63,12 @@ private:
     Server* server;
     Client* client;
     Game* game;
+    QWidget* game_w;
+    int gameMode;
+    bool exit_game_loop = false;
 
 friend class Client;
 friend class Server;
+friend class GameUi;
 };
 #endif // MAINWINDOW_H

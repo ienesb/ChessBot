@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pngs/base/black.png</file>
+        <file>pngs/base/red.png</file>
+        <file>pngs/base/white.png</file>
+        <file>pngs/mainmenu/base.png</file>
+        <file>pngs/mainmenu/co-op.png</file>
+        <file>pngs/mainmenu/exit.png</file>
+        <file>pngs/mainmenu/multiplayer.png</file>
+        <file>pngs/mainmenu/singleplayer.png</file>
+        <file>pngs/pieces/at.png</file>
+        <file>pngs/pieces/fil.png</file>
+        <file>pngs/pieces/kale.png</file>
+        <file>pngs/pieces/piyon.png</file>
+        <file>pngs/pieces/sah.png</file>
+        <file>pngs/pieces/vezir.png</file>
+        <file>pngs/Loading_icon.gif</file>
+    </qresource>
+</RCC>

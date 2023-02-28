@@ -4,6 +4,7 @@
 #include <QMovie>
 #include <QClipboard>
 #include <QTextCodec>
+#include <QAbstractSocket>
 
 void delay(int msec = 150)
 {
@@ -21,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentIndex(0);
     client = new Client(this);
     server = new Server(this);
+    game_w = new QWidget();
     game = nullptr;
     isDataCame = false;
 }
@@ -36,8 +38,9 @@ MainWindow::~MainWindow()
 void MainWindow::start_server_game()
 {
     GameUi ui;
-    game = ui.setupUi(this, 2);
-    this->show();
+    gameMode = 2;
+    game = ui.setupUi(this, gameMode);
+//    this->show();
     online_game_loop(server->get_socket());
 }
 
@@ -47,34 +50,35 @@ void MainWindow::online_game_loop(QTcpSocket* socket)
     QString str_send_data;
     std::vector<int> data{};
     std::vector<int>& coord = game->move_coord;
+    exit_game_loop = false;
 
-    while (true)
+    while (!exit_game_loop)
     {
         if(isDataCame)
         {
+            if(socket->isReadable()){
+                QByteArray raw_data = socket->readAll();
+                QString str_read_data = QTextCodec::codecForName("UTF-8")->
+                        toUnicode(raw_data);
 
-            QByteArray raw_data = socket->readAll();
-            QString str_read_data = QTextCodec::codecForName("UTF-8")->
-                    toUnicode(raw_data);
-
-            if(str_send_data != str_read_data && raw_data.size() == 7){
-                qDebug() << "send message:" << str_read_data;
+                if(str_send_data != str_read_data && raw_data.size() == 7){
+                    qDebug() << "send message:" << str_read_data;
 
 
-                foreach(QString data_loop, str_read_data.split(";"))
-                {
-                    data.push_back(data_loop.toInt());
-                }
+                    foreach(QString data_loop, str_read_data.split(";"))
+                    {
+                        data.push_back(data_loop.toInt());
+                    }
 
-                game->setChosen(game->getBlock(
-                                    data[0], data[1]));
-                game->press(game->getBlock(
+                    game->setChosen(game->getBlock(
+                                        data[0], data[1]));
+                    game->press(game->getBlock(
                                     data[2], data[3]));
-                data.clear();
-                isDataCame = false;
-                str_send_data = str_read_data;
+                    data.clear();
+                    isDataCame = false;
+                    str_send_data = str_read_data;
+                }
             }
-
         }
         else if(game->move_done)
         {
@@ -97,22 +101,24 @@ void MainWindow::online_game_loop(QTcpSocket* socket)
         }
         delay();
     }
-
+    bt_back_game_clicked();
 }
 
 void MainWindow::start_client_game()
 {
     GameUi ui;
-    game = ui.setupUi(this, 3);
-    this->show();
+    gameMode = 3;
+    game = ui.setupUi(this, gameMode);
+//    this->show();
     online_game_loop(client->get_socket());
 }
 
 void MainWindow::on_bt_single_clicked()
 {
     GameUi ui;
-    game = ui.setupUi(this, 0);
-    this->show();
+    gameMode = 0;
+    game = ui.setupUi(this, gameMode);
+//    this->show();
 }
 
 
@@ -125,8 +131,9 @@ void MainWindow::on_bt_exit_clicked()
 void MainWindow::on_bt_local_clicked()
 {
     GameUi ui;
-    ui.setupUi(this, 1);
-    this->show();
+    gameMode = 1;
+    game = ui.setupUi(this, gameMode);
+//    this->show();
 }
 
 
@@ -171,7 +178,7 @@ void MainWindow::on_bt_start_server_clicked()
     QClipboard *clipboard = QGuiApplication::clipboard();
     clipboard->setText(ngrok_command);
 
-    QMovie *movie = new QMovie("../pngs/Loading_icon.gif");
+    QMovie *movie = new QMovie(":/pngs/Loading_icon.gif");
     movie->setScaledSize(QSize(50,50));
     ui->label_load->setMovie(movie);
     ui->label_load->show();
@@ -206,7 +213,7 @@ void MainWindow::on_bt_join_server_clicked()
 
     ui->stackedWidget->setCurrentIndex(5);
 
-    QMovie *movie = new QMovie("../pngs/Loading_icon.gif");
+    QMovie *movie = new QMovie(":/pngs/Loading_icon.gif");
     movie->setScaledSize(QSize(50,50));
     ui->label_join_load->setMovie(movie);
     ui->label_join_load->show();
@@ -222,6 +229,22 @@ void MainWindow::on_bt_back_join_wait_clicked()
     client->get_socket()->close();
 }
 
+void MainWindow::bt_back_game_clicked(){
+    if(gameMode == 2){
+        if(server->get_socket()->state() == QAbstractSocket::ConnectedState){
+            server->get_socket()->close();
+
+        }
+
+    }
+    else if(gameMode == 3){
+        if(client->get_socket()->state() == QAbstractSocket::ConnectedState){
+            client->get_socket()->close();
+        }
+    }
+//    delete game;
+    ui->stackedWidget->setCurrentIndex(0);
+}
 
 
 

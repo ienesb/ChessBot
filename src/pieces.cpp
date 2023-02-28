@@ -57,39 +57,39 @@ Game *Piece::getGame() {
 }
 
 Knight::Knight(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
-    this->path = "../pngs/pieces/at.png";
+    this->path = ":/pngs/pieces/at.png";
     this->name = "at";
     this->image = QImage(this->path.c_str()); 
 }
 
 Bishop::Bishop(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
-    this->path = "../pngs/pieces/fil.png";
+    this->path = ":/pngs/pieces/fil.png";
     this->name = "fil";
     this->image = QImage(this->path.c_str()); 
 }
 
 Rook::Rook(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
-    this->path = "../pngs/pieces/kale.png";
+    this->path = ":/pngs/pieces/kale.png";
     this->name = "kale";
     this->image = QImage(this->path.c_str()); 
     this->isMoved = false;
 }
 
 Queen::Queen(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
-    this->path = "../pngs/pieces/vezir.png";
+    this->path = ":/pngs/pieces/vezir.png";
     this->name = "vezir";
     this->image = QImage(this->path.c_str()); 
 }
 
 King::King(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
-    this->path = "../pngs/pieces/sah.png";
+    this->path = ":/pngs/pieces/sah.png";
     this->name = "sah";
     this->image = QImage(this->path.c_str()); 
     this->isMoved = false;
 }
 
 Pawn::Pawn(std::string color, Block* block, Game* game):Piece::Piece(color, block, game){
-    this->path = "../pngs/pieces/piyon.png";
+    this->path = ":/pngs/pieces/piyon.png";
     this->name = "piyon";
     this->image = QImage(this->path.c_str()); 
 }

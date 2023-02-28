@@ -4,6 +4,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
@@ -46,7 +47,7 @@ private:
 public:
     int gameMode;
     Block* board[64]{};
-    Game(QWidget* centralWidget, int gameMode);
+    Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout);
     void press(Block* pressed);
     Block* getBlock(int x, int y);
     Block* getBlock(const std::vector<int>& coord);
@@ -64,6 +65,8 @@ public:
     void updateCheck();
     std::vector<int>* getAttacker() const;
     std::vector<bool> getCastling() const;
+
+
 friend class Block;
 };
 #endif

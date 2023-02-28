@@ -19,7 +19,7 @@
 #include "player.h"
 #include "move.h"
 
-Game::Game(QWidget* centralWidget, int gameMode) {
+Game::Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout) {
     /* gameMode:
         0 -> singleplayer
         1 -> local 2-player
@@ -55,7 +55,8 @@ Game::Game(QWidget* centralWidget, int gameMode) {
     int i,j;
     for(i = 0; i < 8; i++){
         for(j = 0; j < 8; j++){
-            this->board[8*i+j] = new Block(centralWidget, this, j + 1, 8 - i);
+            this->board[8*i+j] = new Block(centralWidget, this,
+                                           j + 1, 8 - i, gridLayout);
         }
     }
     for(i = 1; i < 9; i++){
