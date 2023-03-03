@@ -20,7 +20,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     bool isDataCame;
-
+    int ingame_volume;
+    Ui::MainWindow* get_ui();
     void start_server_game();
     void start_client_game();
     void online_game_loop(QTcpSocket* socket);
@@ -57,6 +58,12 @@ private slots:
     void on_bt_back_join_wait_clicked();
 
     void on_bt_back_host_wait_clicked();
+
+    void on_bt_back_settings_clicked();
+
+    void on_bt_settings_clicked();
+
+    void on_slide_ingame_volume_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;

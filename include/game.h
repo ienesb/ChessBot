@@ -13,6 +13,8 @@
 #include <QPixmap>
 #define SIZE 75
 
+class MainWindow;
+
 #include "block.h"
 #include "pieces.h"
 #include "move.h"
@@ -35,6 +37,7 @@ private:
     Piece* undoPiece;
 
     QMediaPlayer *player;
+    MainWindow *mainWindow;
 
     bool wCastlingLeft;
     bool wCastlingRight;
@@ -49,9 +52,8 @@ private:
 
     
 public:
-    int gameMode;
     Block* board[64]{};
-    Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout);
+    Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout, MainWindow *MainWindow);
     void press(Block* pressed);
     Block* getBlock(int x, int y);
     Block* getBlock(const std::vector<int>& coord);
@@ -63,6 +65,7 @@ public:
     void update();
     void setChosen(Block* block);
 
+    int gameMode;
     bool move_done = false;
     std::vector<int> move_coord;
 

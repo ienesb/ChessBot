@@ -36,6 +36,10 @@ MainWindow::~MainWindow()
     delete game;
 }
 
+Ui::MainWindow* MainWindow::get_ui(){
+    return ui;
+}
+
 void MainWindow::start_server_game()
 {
     GameUi ui;
@@ -245,6 +249,19 @@ void MainWindow::bt_back_game_clicked(){
     ui->stackedWidget->setCurrentIndex(0);
 }
 
+void MainWindow::on_bt_back_settings_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
+void MainWindow::on_bt_settings_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(6);
+}
 
 
+void MainWindow::on_slide_ingame_volume_valueChanged(int value)
+{
+    ui->ingame_volume->setText(QString("%%1").arg(value));
+}
 

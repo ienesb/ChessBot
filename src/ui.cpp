@@ -45,7 +45,7 @@ Game* GameUi::setupUi(MainWindow *MainWindow, int gameMode){
     gridLayout->setVerticalSpacing(0);
     gridLayout->setHorizontalSpacing(0);
 
-    this->game = new Game(centralwidget, gameMode, gridLayout);
+    this->game = new Game(centralwidget, gameMode, gridLayout, MainWindow);
 
     QSizePolicy sizePolicy_bt(QSizePolicy::Expanding, QSizePolicy::Expanding);
     bt_back_game = new QPushButton(centralwidget);

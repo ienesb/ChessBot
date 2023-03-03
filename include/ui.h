@@ -25,7 +25,7 @@ class GameUi{
     QWidget *centralwidget;
     QLabel *label;
     QStatusBar *statusbar;
-    QGridLayout *gridLayout = nullptr;
+    QGridLayout *gridLayout;
     QGridLayout *gridLayoutCentral;
 
     QSpacerItem *horizontalSpacer_7;

@@ -20,13 +20,17 @@
 #include "player.h"
 #include "move.h"
 
-Game::Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout) {
+#include "mainwindow.h"
+#include "./ui_mainwindow.h"
+
+Game::Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout, MainWindow *MainWindow) {
     /* gameMode:
         0 -> singleplayer
         1 -> local 2-player
         2 -> online2plyr - host mode
         3 -> online2plyr - join mode
     */
+    this->mainWindow = MainWindow;
     this->gameMode = gameMode;
 
     if(gameMode == 0){
@@ -129,7 +133,7 @@ Game::Game(QWidget* centralWidget, int gameMode, QGridLayout* gridLayout) {
     this->update();
 
     player = new QMediaPlayer;
-    player->setVolume(100);
+    player->setVolume(mainWindow->get_ui()->slide_ingame_volume->sliderPosition());
 }
 
 void Game::press(Block *pressed) {
