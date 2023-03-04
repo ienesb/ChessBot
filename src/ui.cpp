@@ -38,17 +38,16 @@ Game* GameUi::setupUi(MainWindow *MainWindow, int gameMode){
     delete MainWindow->game_w;
     MainWindow->game_w = new QWidget();
     MainWindow->ui->stackedWidget->addWidget(MainWindow->game_w);
-    QWidget* centralwidget = MainWindow->game_w;
-//    centralwidget = MainWindow->ui->page_game;
+    QWidget* game_widget = MainWindow->game_w;
     gridLayout = new QGridLayout();
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
     gridLayout->setVerticalSpacing(0);
     gridLayout->setHorizontalSpacing(0);
 
-    this->game = new Game(centralwidget, gameMode, gridLayout, MainWindow);
+    this->game = new Game(game_widget, gameMode, gridLayout, MainWindow);
 
     QSizePolicy sizePolicy_bt(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    bt_back_game = new QPushButton(centralwidget);
+    bt_back_game = new QPushButton(game_widget);
     bt_back_game->setObjectName(QString::fromUtf8("bt_back_game"));
     sizePolicy_bt.setHeightForWidth(bt_back_game->sizePolicy().hasHeightForWidth());
     bt_back_game->setText("Back");
@@ -73,8 +72,8 @@ Game* GameUi::setupUi(MainWindow *MainWindow, int gameMode){
     horizontalLayout->addLayout(gridLayout);
     horizontalLayout->addLayout(verticalLayout);
 
-    delete centralwidget->layout();
-    gridLayoutCentral = new QGridLayout(centralwidget);
+    delete game_widget->layout();
+    gridLayoutCentral = new QGridLayout(game_widget);
     gridLayoutCentral->setObjectName(QString::fromUtf8("gridLayoutCentral"));
 
     horizontalSpacer_8 = new QSpacerItem(119, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -87,7 +86,7 @@ Game* GameUi::setupUi(MainWindow *MainWindow, int gameMode){
     gridLayoutCentral->addItem(horizontalSpacer_7, 1, 0, 1, 1);
     gridLayoutCentral->addLayout(horizontalLayout, 1, 1, 1, 1);
     
-    MainWindow->ui->stackedWidget->setCurrentWidget(centralwidget);
+    MainWindow->ui->stackedWidget->setCurrentWidget(game_widget);
 //    MainWindow->setCentralWidget(centralwidget);
 //    statusbar = new QStatusBar(MainWindow);
 //    statusbar->setObjectName(QString::fromUtf8("statusbar"));

@@ -39,7 +39,6 @@ QTcpSocket* Server::get_socket()
 
 void Server::newConnection()
 {
-    qDebug() << "meow";
     socket = server->nextPendingConnection();
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(socket, SIGNAL(bytesWritten(qint64)), this, SLOT(bytesWritten(qint64)));

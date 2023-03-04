@@ -189,7 +189,16 @@ void Game::press(Block *pressed) {
             }
             else if (code == 1){
                 qDebug() << "success castling";
-                play_chess_sound(2);
+
+                auto current = chosen->getPiece()->getBlock()->getCoordinates();
+                auto target = pressed->getCoordinates();
+                move_coord = std::vector<int>{current[0], current[1],
+                                            target[0], target[1]};
+                qDebug() << "move_coord:" << move_coord;
+                move_done = true;
+
+                play_chess_sound(0);
+
                 this->performCastling(static_cast<King *>(chosen->getPiece()), pressed);
                 chosen->isClicked = false;
                 chosen = nullptr;
